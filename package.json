@@ -87,7 +87,7 @@
     "url-loader": "^4.1.1"
   },
   "scripts": {
-    "start": "webpack serve --mode=development",
+    "start": "webpack serve --open --mode=development",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ./src",
