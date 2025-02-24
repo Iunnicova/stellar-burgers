@@ -4,11 +4,12 @@ import {
   useSelector as selectorHook
 } from 'react-redux';
 
-import { userSliceReducer } from '@slices';
+import { userSliceReducer, ingredientsSliceReducer } from '@slices';
 
 const store = configureStore({
   reducer: {
-    user: userSliceReducer
+    user: userSliceReducer,
+    ingredients: ingredientsSliceReducer
   },
   devTools: process.env.NODE_ENV !== 'production'
 });
