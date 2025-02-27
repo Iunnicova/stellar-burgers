@@ -22,7 +22,7 @@ export const ingredientsSlice = createSlice({
   selectors: {
     selectIngredients: (state) => state.ingredients,
     selectError: (state) => state.error,
-    selecttIsLoaded: (state) => state.isLoaded
+    selectIsLoaded: (state) => state.isLoaded
   },
   extraReducers(builder) {
     builder
@@ -64,7 +64,7 @@ export const getIngredients = createAsyncThunk(
   }
 );
 
-export const { selectIngredients, selectError, selecttIsLoaded } =
+export const { selectIngredients, selectError, selectIsLoaded } =
   ingredientsSlice.selectors;
 
 export const ingredientsSliceReducer = ingredientsSlice.reducer;

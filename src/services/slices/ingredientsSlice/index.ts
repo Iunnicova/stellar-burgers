@@ -3,5 +3,5 @@ export {
   getIngredients,
   selectIngredients,
   selectError,
-  selecttIsLoaded
+  selectIsLoaded
 } from './ingredientsSlice';

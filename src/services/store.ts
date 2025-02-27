@@ -7,14 +7,16 @@ import {
 import {
   userSliceReducer,
   ingredientsSliceReducer,
-  burgerSliceReducer
+  burgerSliceReducer,
+  ordersSliceReducer
 } from '@slices';
 
 const store = configureStore({
   reducer: {
     user: userSliceReducer,
     ingredients: ingredientsSliceReducer,
-    burger: burgerSliceReducer
+    burger: burgerSliceReducer,
+    orders: ordersSliceReducer
   },
   devTools: process.env.NODE_ENV !== 'production'
 });
