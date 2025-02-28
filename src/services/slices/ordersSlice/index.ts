@@ -1,5 +1,9 @@
 export {
   ordersSliceReducer,
+  getAllOrdersData,
+  getUserOrders,
+  getOrder,
+  createNewOrder,
   selectOrders,
   selectOrder,
   selectTotalOrders,
