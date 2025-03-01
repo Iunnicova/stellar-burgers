@@ -8,7 +8,8 @@ import {
   userSliceReducer,
   ingredientsSliceReducer,
   burgerSliceReducer,
-  ordersSliceReducer
+  ordersSliceReducer,
+  feedSliceReducer
 } from '@slices';
 
 const store = configureStore({
@@ -16,7 +17,8 @@ const store = configureStore({
     user: userSliceReducer,
     ingredients: ingredientsSliceReducer,
     burger: burgerSliceReducer,
-    orders: ordersSliceReducer
+    orders: ordersSliceReducer,
+    feed: feedSliceReducer
   },
   devTools: process.env.NODE_ENV !== 'production'
 });

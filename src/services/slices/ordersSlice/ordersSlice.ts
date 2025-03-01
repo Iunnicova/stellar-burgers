@@ -1,18 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import {
-  getFeedsApi,
-  getOrdersApi,
-  getOrderByNumberApi,
-  orderBurgerApi
-} from '@api';
+import { getOrdersApi, getOrderByNumberApi, orderBurgerApi } from '@api';
 import { TOrder } from '@utils-types';
 
 type TOrdersSliceState = {
   orders: TOrder[];
   order: TOrder | null;
-  totalOrders: number;
-  totalOrdersToday: number;
   error: string | null | undefined;
   isLoaded: boolean;
 };
@@ -20,8 +13,6 @@ type TOrdersSliceState = {
 const initialState: TOrdersSliceState = {
   orders: [],
   order: null,
-  totalOrders: 0,
-  totalOrdersToday: 0,
   error: null,
   isLoaded: false
 };
@@ -33,27 +24,11 @@ export const ordersSlice = createSlice({
   selectors: {
     selectOrders: (state) => state.orders,
     selectOrder: (state) => state.order,
-    selectTotalOrders: (state) => state.totalOrders,
-    selectTotalOrdersToday: (state) => state.totalOrders,
     selectOrdersError: (state) => state.error,
     selectIsOrdersLoaded: (state) => state.isLoaded
   },
   extraReducers(builder) {
     builder
-      .addCase(getAllOrdersData.pending, (state) => {
-        state.error = null;
-        state.isLoaded = true;
-      })
-      .addCase(getAllOrdersData.fulfilled, (state, action) => {
-        state.orders = action.payload.orders;
-        state.totalOrders = action.payload.total;
-        state.totalOrdersToday = action.payload.totalToday;
-        state.isLoaded = false;
-      })
-      .addCase(getAllOrdersData.rejected, (state, action) => {
-        state.error = action.error.message || 'Произошла ошибка';
-        state.isLoaded = false;
-      })
 
       .addCase(getUserOrders.pending, (state) => {
         state.error = null;
@@ -95,17 +70,6 @@ export const ordersSlice = createSlice({
       });
   }
 });
-
-export const getAllOrdersData = createAsyncThunk(
-  'orders/getAllOrdersData',
-  async (_, { rejectWithValue }) => {
-    const response = await getFeedsApi();
-    if (!response.success) {
-      return rejectWithValue(response);
-    }
-    return response;
-  }
-);
 
 export const getUserOrders = createAsyncThunk(
   'orders/getUserOrders',
@@ -152,8 +116,6 @@ export const createNewOrder = createAsyncThunk(
 export const {
   selectOrders,
   selectOrder,
-  selectTotalOrders,
-  selectTotalOrdersToday,
   selectOrdersError,
   selectIsOrdersLoaded
 } = ordersSlice.selectors;
