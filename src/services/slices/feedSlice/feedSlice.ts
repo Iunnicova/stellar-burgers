@@ -25,6 +25,8 @@ export const feedSlice = createSlice({
   reducers: {},
   selectors: {
     selectAllOrders: (state) => state.orders,
+    selectTotalOrders: (state) => state.totalOrders,
+    selectTotalOrdersToday: (state) => state.totalOrdersToday,
     selectFeedError: (state) => state.error,
     selectIsFeedLoaded: (state) => state.isFeedLoaded
   },
@@ -58,7 +60,12 @@ export const getAllOrdersData = createAsyncThunk(
   }
 );
 
-export const { selectAllOrders, selectFeedError, selectIsFeedLoaded } =
-  feedSlice.selectors;
+export const {
+  selectAllOrders,
+  selectTotalOrders,
+  selectTotalOrdersToday,
+  selectFeedError,
+  selectIsFeedLoaded
+} = feedSlice.selectors;
 
 export const feedSliceReducer = feedSlice.reducer;

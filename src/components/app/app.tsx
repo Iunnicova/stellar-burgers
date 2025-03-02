@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
 import {
   ConstructorPage,
@@ -27,8 +27,11 @@ import styles from './app.module.css';
 import '../../index.css';
 
 const App = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const modalMode = location?.state?.background ?? false;
 
   useEffect(() => {
     dispatch(getIngredients());
@@ -42,9 +45,10 @@ const App = () => {
     <div className={styles.app}>
       <AppHeader />
       <main className={styles.main}>
-        <Routes>
+        <Routes location={modalMode || location}>
           <Route path='/' element={<ConstructorPage />} />
           <Route path='/feed' element={<Feed />} />
+          <Route path='/feed/:number' element={<OrderInfo />} />
           <Route
             path='/login'
             element={
@@ -97,31 +101,43 @@ const App = () => {
             path='/profile/orders/:number'
             element={
               <PrivateRoute>
-                <Modal title='' onClose={() => console.log()}>
-                  <OrderInfo />
-                </Modal>
+                <OrderInfo />
               </PrivateRoute>
             }
           />
-
-          <Route
-            path='/feed/:number'
-            element={
-              <Modal title='Временно' onClose={handleCloseModal}>
-                <OrderInfo />
-              </Modal>
-            }
-          />
-          <Route
-            path='/ingredients/:id'
-            element={
-              <Modal title='' onClose={() => console.log()}>
-                <IngredientDetails />
-              </Modal>
-            }
-          />
+          <Route path='/ingredients/:id' element={<IngredientDetails />} />
           <Route path='*' element={<NotFound404 />} />
         </Routes>
+        {modalMode && (
+          <Routes>
+            <Route
+              path='/profile/orders/:number'
+              element={
+                <PrivateRoute>
+                  <Modal title='' onClose={() => console.log()}>
+                    <OrderInfo />
+                  </Modal>
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path='/feed/:number'
+              element={
+                <Modal title='Временно' onClose={handleCloseModal}>
+                  <OrderInfo />
+                </Modal>
+              }
+            />
+            <Route
+              path='/ingredients/:id'
+              element={
+                <Modal title='' onClose={() => console.log()}>
+                  <IngredientDetails />
+                </Modal>
+              }
+            />
+          </Routes>
+        )}
       </main>
     </div>
   );
