@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { getFeedsApi } from '@api';
 import { TOrder } from '@utils-types';
+import { API_ERROR } from '../../../utils/constants';
 
 type TFeedSliceState = {
   orders: TOrder[];
@@ -43,7 +44,7 @@ export const feedSlice = createSlice({
         state.isFeedLoaded = false;
       })
       .addCase(getAllOrdersData.rejected, (state, action) => {
-        state.error = action.error.message || 'Произошла ошибка';
+        state.error = action.error.message || API_ERROR;
         state.isFeedLoaded = false;
       });
   }

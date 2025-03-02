@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { getOrdersApi, getOrderByNumberApi, orderBurgerApi } from '@api';
 import { TOrder } from '@utils-types';
+import { API_ERROR } from '../../../utils/constants';
 
 type TOrdersSliceState = {
   orders: TOrder[];
@@ -39,7 +40,7 @@ export const ordersSlice = createSlice({
         state.isLoaded = false;
       })
       .addCase(getUserOrders.rejected, (state, action) => {
-        state.error = action.error.message || 'Произошла ошибка';
+        state.error = action.error.message || API_ERROR;
         state.isLoaded = false;
       })
 
@@ -52,7 +53,7 @@ export const ordersSlice = createSlice({
         state.isLoaded = false;
       })
       .addCase(getOrder.rejected, (state, action) => {
-        state.error = action.error.message || 'Произошла ошибка';
+        state.error = action.error.message || API_ERROR;
         state.isLoaded = false;
       })
 
@@ -65,7 +66,7 @@ export const ordersSlice = createSlice({
         state.isLoaded = false;
       })
       .addCase(createNewOrder.rejected, (state, action) => {
-        state.error = action.error.message || 'Произошла ошибка';
+        state.error = action.error.message || API_ERROR;
         state.isLoaded = false;
       });
   }

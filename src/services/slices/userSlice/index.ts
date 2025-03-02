@@ -5,6 +5,7 @@ export {
   getDataUser,
   updateDataUser,
   userLogout,
+  removeError,
   selectUser,
   selectIsAuthTokenChecked,
   selectIsAuthenticated,

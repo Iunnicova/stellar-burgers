@@ -20,7 +20,7 @@ import {
   Modal
 } from '@components';
 
-import { getIngredients } from '@slices';
+import { getDataUser, getIngredients } from '@slices';
 import { useDispatch } from '@store';
 
 import styles from './app.module.css';
@@ -35,6 +35,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(getIngredients());
+    dispatch(getDataUser());
   }, [dispatch]);
 
   const handleCloseModal = () => {

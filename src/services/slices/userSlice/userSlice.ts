@@ -10,6 +10,7 @@ import {
 } from '@api';
 import { TUser } from '@utils-types';
 import { deleteCookie, setCookie } from '@utils-cookie';
+import { API_ERROR } from '../../../utils/constants';
 
 type TUserSliceState = {
   user: TUser | null;
@@ -30,7 +31,11 @@ const initialState: TUserSliceState = {
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    removeError: (state) => {
+      state.error = null;
+    }
+  },
   selectors: {
     selectUser: (state) => state.user,
     selectIsAuthTokenChecked: (state) => state.isAuthTokenChecked,
@@ -52,7 +57,7 @@ export const userSlice = createSlice({
         state.isDataLoaded = false;
       })
       .addCase(registerUser.rejected, (state, action) => {
-        state.error = action.error.message || 'Произошла ошибка';
+        state.error = action.error.message || API_ERROR;
         state.isDataLoaded = false;
       })
       // Авторизация пользователя
@@ -68,7 +73,7 @@ export const userSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isAuthTokenChecked = true;
-        state.error = action.error.message || 'Произошла ошибка';
+        state.error = action.error.message || API_ERROR;
         state.isDataLoaded = false;
       })
       // Получение данных пользователя
@@ -86,11 +91,12 @@ export const userSlice = createSlice({
       .addCase(getDataUser.rejected, (state, action) => {
         state.isAuthTokenChecked = true;
         state.isAuthenticated = false;
-        state.error = action.error.message || 'Произошла ошибка';
+        state.error = action.error.message || API_ERROR;
         state.isDataLoaded = false;
       })
       // Обновление данных пользователя
       .addCase(updateDataUser.pending, (state) => {
+        state.error = null;
         state.isDataLoaded = true;
       })
       .addCase(updateDataUser.fulfilled, (state, action) => {
@@ -98,11 +104,12 @@ export const userSlice = createSlice({
         state.isDataLoaded = false;
       })
       .addCase(updateDataUser.rejected, (state, action) => {
-        state.error = action.error.message || 'Произошла ошибка';
+        state.error = action.error.message || API_ERROR;
         state.isDataLoaded = false;
       })
       // Выход пользователя из приложения
       .addCase(userLogout.pending, (state) => {
+        state.error = null;
         state.isDataLoaded = true;
       })
       .addCase(userLogout.fulfilled, (state) => {
@@ -112,7 +119,7 @@ export const userSlice = createSlice({
         state.isDataLoaded = false;
       })
       .addCase(userLogout.rejected, (state, action) => {
-        state.error = action.error.message || 'Произошла ошибка';
+        state.error = action.error.message || API_ERROR;
         state.isDataLoaded = false;
       });
   }
@@ -185,5 +192,7 @@ export const {
   selectUserError,
   selectIsUserDataLoaded
 } = userSlice.selectors;
+
+export const { removeError } = userSlice.actions;
 
 export const userSliceReducer = userSlice.reducer;

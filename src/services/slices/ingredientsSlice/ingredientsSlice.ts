@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { getIngredientsApi } from '@api';
 import { TIngredient } from '@utils-types';
+import { API_ERROR } from '../../../utils/constants';
 
 type TIngredientsSliceState = {
   ingredients: TIngredient[];
@@ -39,7 +40,7 @@ export const ingredientsSlice = createSlice({
       )
       .addCase(getIngredients.rejected, (state, action) => {
         state.isLoaded = false;
-        state.error = (action.payload as string) || 'Произошла ошибка';
+        state.error = (action.payload as string) || API_ERROR;
       });
   }
 });
@@ -58,7 +59,7 @@ export const getIngredients = createAsyncThunk(
       ) {
         return rejectWithValue(error.response.data.message);
       } else {
-        return rejectWithValue(error.message || 'Произошла неизвестная ошибка');
+        return rejectWithValue(error.message || API_ERROR);
       }
     }
   }
