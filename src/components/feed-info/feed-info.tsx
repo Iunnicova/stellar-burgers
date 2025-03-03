@@ -9,11 +9,24 @@ import {
   selectTotalOrdersToday
 } from '@slices';
 
-const getOrders = (orders: TOrder[], status: string): number[] =>
-  orders
-    .filter((item) => item.status === status)
-    .map((item) => item.number)
-    .slice(0, 20);
+// const getOrders = (orders: TOrder[], status: string): number[] =>
+//   orders
+//     .filter((item) => item.status === status)
+//     .map((item) => item.number)
+//     .slice(0, 20);
+
+const getOrders = (orders: TOrder[], status: string): number[] => {
+  const result: number[] = [];
+  for (const item of orders) {
+    if (item.status === status) {
+      result.push(item.number);
+      if (result.length >= 20) {
+        break; // Ранний выход, если достигнут лимит для оптимизации. (надо не забыть попробовать с реселектом в слайсе)
+      }
+    }
+  }
+  return result;
+};
 
 export const FeedInfo: FC = () => {
   const orders: TOrder[] = useSelector(selectAllOrders);

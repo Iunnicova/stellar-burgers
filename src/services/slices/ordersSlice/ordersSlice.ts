@@ -21,7 +21,11 @@ const initialState: TOrdersSliceState = {
 export const ordersSlice = createSlice({
   name: 'orders',
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    clearOrderState: (state) => {
+      state.order = null;
+    }
+  },
   selectors: {
     selectOrders: (state) => state.orders,
     selectOrder: (state) => state.order,
@@ -113,6 +117,8 @@ export const createNewOrder = createAsyncThunk(
     return response;
   }
 );
+
+export const { clearOrderState } = ordersSlice.actions;
 
 export const {
   selectOrders,

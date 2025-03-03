@@ -5,15 +5,23 @@ import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
 import { useSelector, useDispatch } from '@store';
-import { getOrder, selectIngredients, selectOrder } from '@slices';
+import {
+  clearOrderState,
+  getOrder,
+  selectIngredients,
+  selectOrder
+} from '@slices';
 
 export const OrderInfo: FC = () => {
-  const { number } = useParams();
+  const { number } = useParams<{ number: string }>();
   const orderData = useSelector(selectOrder);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (number) dispatch(getOrder(+number));
+    return () => {
+      dispatch(clearOrderState());
+    };
   }, [number, dispatch]);
 
   const ingredients: TIngredient[] = useSelector(selectIngredients);

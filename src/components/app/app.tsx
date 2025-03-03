@@ -39,7 +39,7 @@ const App = () => {
   }, [dispatch]);
 
   const handleCloseModal = () => {
-    navigate(-1);
+    navigate(modalMode ?? '/');
   };
 
   return (
@@ -115,7 +115,7 @@ const App = () => {
               path='/profile/orders/:number'
               element={
                 <PrivateRoute>
-                  <Modal title='' onClose={() => console.log()}>
+                  <Modal title='Заказ №' onClose={handleCloseModal}>
                     <OrderInfo />
                   </Modal>
                 </PrivateRoute>
@@ -124,7 +124,7 @@ const App = () => {
             <Route
               path='/feed/:number'
               element={
-                <Modal title='Временно' onClose={handleCloseModal}>
+                <Modal title='Заказ №' onClose={handleCloseModal}>
                   <OrderInfo />
                 </Modal>
               }
@@ -132,7 +132,7 @@ const App = () => {
             <Route
               path='/ingredients/:id'
               element={
-                <Modal title='' onClose={() => console.log()}>
+                <Modal title='Детали ингредиента' onClose={handleCloseModal}>
                   <IngredientDetails />
                 </Modal>
               }

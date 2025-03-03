@@ -3,6 +3,7 @@ export {
   getUserOrders,
   getOrder,
   createNewOrder,
+  clearOrderState,
   selectOrders,
   selectOrder,
   selectOrdersError,
