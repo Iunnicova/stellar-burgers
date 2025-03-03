@@ -5,10 +5,10 @@ import {
   FormattedDate
 } from '@zlden/react-developer-burger-ui-components';
 
-import styles from './order-card.module.css';
-
 import { OrderCardUIProps } from './type';
 import { OrderStatus } from '@components';
+
+import styles from './order-card.module.css';
 
 export const OrderCardUI: FC<OrderCardUIProps> = memo(
   ({ orderInfo, maxIngredients, locationState }) => (
