@@ -12,7 +12,7 @@ import { TUser } from '@utils-types';
 import { deleteCookie, setCookie } from '@utils-cookie';
 import { API_ERROR } from '../../../utils/constants';
 
-type TUserSliceState = {
+export type TUserSliceState = {
   user: TUser | null;
   isAuthTokenChecked: boolean;
   isAuthenticated: boolean;
@@ -20,7 +20,7 @@ type TUserSliceState = {
   isDataLoaded: boolean;
 };
 
-const initialState: TUserSliceState = {
+export const initialState: TUserSliceState = {
   user: null,
   isAuthTokenChecked: false,
   isAuthenticated: false,

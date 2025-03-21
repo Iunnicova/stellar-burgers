@@ -12,11 +12,12 @@ type TFeedSliceState = {
   isFeedLoaded: boolean;
 };
 
-const initialState: TFeedSliceState = {
+export const initialState: TFeedSliceState = {
   orders: [],
   totalOrders: 0,
   totalOrdersToday: 0,
-  error: null,
+  // error: null,
+  error: '',
   isFeedLoaded: false
 };
 
@@ -41,7 +42,8 @@ export const feedSlice = createSlice({
         state.orders = action.payload.orders;
         state.totalOrders = action.payload.total;
         state.totalOrdersToday = action.payload.totalToday;
-        state.isFeedLoaded = false;
+        // state.isFeedLoaded = false;
+        state.isFeedLoaded = true;
       })
       .addCase(getAllOrdersData.rejected, (state, action) => {
         state.error = action.error.message || API_ERROR;

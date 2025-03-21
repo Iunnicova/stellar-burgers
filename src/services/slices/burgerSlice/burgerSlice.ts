@@ -2,7 +2,7 @@ import { createSlice, PayloadAction, nanoid } from '@reduxjs/toolkit';
 
 import { TConstructorIngredient, TIngredient } from '@utils-types';
 
-type TBurgerSliceState = {
+export type TBurgerSliceState = {
   bun: TConstructorIngredient | null;
   ingredients: TConstructorIngredient[];
 };
@@ -12,7 +12,7 @@ export const initialState: TBurgerSliceState = {
   ingredients: []
 };
 
-const burgerSlice = createSlice({
+export const burgerSlice = createSlice({
   name: 'burger',
   initialState,
   reducers: {
@@ -29,37 +29,59 @@ const burgerSlice = createSlice({
         return { payload: { ...ingredient, id } };
       }
     },
+
     deleteIngredient: (state, { payload }: PayloadAction<string>) => {
       state.ingredients = state.ingredients.filter(
         (ingredient) => ingredient.id !== payload
       );
     },
+
     clearBurgerConstructor: () => initialState,
-    moveIngredientUp: (
-      state,
-      { payload }: PayloadAction<TConstructorIngredient>
-    ) => {
-      const ingredientIndex = state.ingredients.findIndex(
-        (ingredient) => ingredient.id === payload.id
-      );
-      if (ingredientIndex > 0) {
-        state.ingredients[ingredientIndex] =
-          state.ingredients[ingredientIndex - 1];
-        state.ingredients[ingredientIndex - 1] = payload;
+    // moveIngredientUp: (
+    //   state,
+    //   { payload }: PayloadAction<TConstructorIngredient>
+    // ) => {
+    //   const ingredientIndex = state.ingredients.findIndex(
+    //     (ingredient) => ingredient.id === payload.id
+    //   );
+    //   if (ingredientIndex > 0) {
+    //     state.ingredients[ingredientIndex] =
+    //       state.ingredients[ingredientIndex - 1];
+    //     state.ingredients[ingredientIndex - 1] = payload;
+    //   }
+    // },
+    // moveIngredientDown: (
+    //   state,
+    //   { payload }: PayloadAction<TConstructorIngredient>
+    // ) => {
+    //   const ingredientIndex = state.ingredients.findIndex(
+    //     (ingredient) => ingredient.id === payload.id
+    //   );
+    //   if (ingredientIndex < state.ingredients.length - 1) {
+    //     state.ingredients[ingredientIndex] =
+    //       state.ingredients[ingredientIndex + 1];
+    //     state.ingredients[ingredientIndex + 1] = payload;
+    //   }
+    // }
+    moveIngredientUp: (state, action: PayloadAction<number>) => {
+      const dragIndex = action.payload;
+      if (dragIndex <= 0) {
+        return;
       }
+      const hoverIndex = dragIndex - 1;
+      const dragIngredient = state.ingredients[dragIndex];
+      state.ingredients.splice(dragIndex, 1);
+      state.ingredients.splice(hoverIndex, 0, dragIngredient);
     },
-    moveIngredientDown: (
-      state,
-      { payload }: PayloadAction<TConstructorIngredient>
-    ) => {
-      const ingredientIndex = state.ingredients.findIndex(
-        (ingredient) => ingredient.id === payload.id
-      );
-      if (ingredientIndex < state.ingredients.length - 1) {
-        state.ingredients[ingredientIndex] =
-          state.ingredients[ingredientIndex + 1];
-        state.ingredients[ingredientIndex + 1] = payload;
+    moveIngredientDown: (state, action: PayloadAction<number>) => {
+      const dragIndex = action.payload;
+      if (dragIndex >= state.ingredients.length - 1) {
+        return;
       }
+      const hoverIndex = dragIndex + 1;
+      const dragIngredient = state.ingredients[dragIndex];
+      state.ingredients.splice(dragIndex, 1);
+      state.ingredients.splice(hoverIndex, 0, dragIngredient);
     }
   },
   selectors: {

@@ -10,6 +10,7 @@ export type TIngredient = {
   image: string;
   image_large: string;
   image_mobile: string;
+  // count?: number;
 };
 
 export type TConstructorIngredient = TIngredient & {
@@ -38,3 +39,6 @@ export type TUser = {
 };
 
 export type TTabMode = 'bun' | 'sauce' | 'main';
+
+
+
