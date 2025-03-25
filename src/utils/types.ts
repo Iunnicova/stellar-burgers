@@ -39,6 +39,3 @@ export type TUser = {
 };
 
 export type TTabMode = 'bun' | 'sauce' | 'main';
-
-
-

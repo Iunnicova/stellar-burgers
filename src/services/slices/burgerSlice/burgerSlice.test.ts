@@ -1,21 +1,27 @@
-import { describe, expect, test } from '@jest/globals';
+import { configureStore } from '@reduxjs/toolkit';
+import store from '@store';
 import {
   burgerSliceReducer,
   initialState,
   addIngredient,
   deleteIngredient,
   clearBurgerConstructor,
-  selectIngredientConstructor,
-  selectBun,
   moveIngredientUp,
-  moveIngredientDown
-} from '../../../../src/services/slices/burgerSlice/burgerSlice';
+  moveIngredientDown,
+  selectBun,
+  selectIngredientConstructor
+} from './burgerSlice';
 import { createMockConstructorIngredient } from './test-utils';
 
 jest.mock('@reduxjs/toolkit', () => ({
   ...jest.requireActual('@reduxjs/toolkit'),
   nanoid: jest.fn(() => 'mocked-nanoid')
 }));
+
+let mockState: RootState;
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
 describe('createMockConstructorIngredient', () => {
   test('должен использовать переданный id из overrides', () => {
@@ -38,7 +44,7 @@ describe('Тестирование burgerSlice', () => {
     });
     const state = burgerSliceReducer(initialState, addIngredient(bun));
     expect(state.bun).toEqual(
-      expect.objectContaining({ ...bun, id: expect.stringMatching(/.*/) })
+      expect.objectContaining({ ...bun, id: expect.any(String) })
     );
     expect(state.ingredients).toEqual([]);
   });
@@ -51,10 +57,7 @@ describe('Тестирование burgerSlice', () => {
     const state = burgerSliceReducer(initialState, addIngredient(ingredient));
     expect(state.ingredients).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({
-          ...ingredient,
-          id: expect.stringMatching(/.*/)
-        })
+        expect.objectContaining({ ...ingredient, id: expect.any(String) })
       ])
     );
     expect(state.bun).toBeNull();
@@ -100,14 +103,8 @@ describe('Тестирование burgerSlice', () => {
     state = burgerSliceReducer(state, addIngredient(ingredient2));
     expect(state.ingredients).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({
-          ...ingredient1,
-          id: expect.stringMatching(/.*/)
-        }),
-        expect.objectContaining({
-          ...ingredient2,
-          id: expect.stringMatching(/.*/)
-        })
+        expect.objectContaining({ ...ingredient1, id: expect.any(String) }),
+        expect.objectContaining({ ...ingredient2, id: expect.any(String) })
       ])
     );
   });
@@ -207,34 +204,52 @@ describe('Тестирование burgerSlice', () => {
   });
 });
 
-describe('селекторы', () => {
-  const ingredient1 = createMockConstructorIngredient({
-    type: 'sauce',
-    name: 'Соус с шипами Антарианского плоскоходца'
-  });
-  const ingredient2 = createMockConstructorIngredient({
-    type: 'cheese',
-    name: 'Сыр с запахом туманности Андромеды'
+describe('Тестирование селекторов', () => {
+  beforeEach(() => {
+    const bun = createMockConstructorIngredient({
+      type: 'bun',
+      name: 'Флюоресцентная булка R2-D3',
+      id: 'bun_id'
+    });
+    const ingredient = createMockConstructorIngredient({
+      type: 'sauce',
+      name: 'Соус с шипами Антарианского плоскоходца',
+      id: 'sauce_id'
+    });
+
+    const store = configureStore({
+      reducer: {
+        burger: burgerSliceReducer
+      }
+    });
+
+    store.dispatch(addIngredient(bun));
+    store.dispatch(addIngredient(ingredient));
+
+    mockState = store.getState() as RootState;
   });
 
-  const mockState = {
-    burger: {
-      bun: ingredient1,
-      ingredients: [ingredient1, ingredient2],
-      totalPrice: 0
-    }
-    // otherSlice: {
-    //   someValue: 'someValue'
-    // }
-  };
-
-  test('должен возвращать булку', () => {
+  it('должен возвращать булку', () => {
+    const bun = createMockConstructorIngredient({
+      type: 'bun',
+      name: 'Флюоресцентная булка R2-D3',
+      id: 'bun_id'
+    });
     expect(selectBun(mockState)).toEqual(mockState.burger.bun);
+    expect.objectContaining({ ...bun, id: expect.any(String) });
   });
 
-  test('должен возвращать список ингредиентов', () => {
+  it('должен возвращать список ингредиентов', () => {
+    const ingredient = createMockConstructorIngredient({
+      type: 'sauce',
+      name: 'Соус с шипами Антарианского плоскоходца',
+      id: 'sauce_id'
+    });
     expect(selectIngredientConstructor(mockState)).toEqual(
       mockState.burger.ingredients
     );
+    expect.arrayContaining([
+      expect.objectContaining({ ...ingredient, id: expect.any(String) })
+    ]);
   });
 });

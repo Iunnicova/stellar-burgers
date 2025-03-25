@@ -1,4 +1,8 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import {
+  createAsyncThunk,
+  createSelector,
+  createSlice
+} from '@reduxjs/toolkit';
 
 import {
   registerUserApi,
@@ -36,13 +40,7 @@ export const userSlice = createSlice({
       state.error = null;
     }
   },
-  selectors: {
-    selectUser: (state) => state.user,
-    selectIsAuthTokenChecked: (state) => state.isAuthTokenChecked,
-    selectIsAuthenticated: (state) => state.isAuthenticated,
-    selectUserError: (state) => state.error,
-    selectIsUserDataLoaded: (state) => state.isDataLoaded
-  },
+
   extraReducers(builder) {
     builder
       // Регистрация пользователя
@@ -185,13 +183,28 @@ export const userLogout = createAsyncThunk(
   }
 );
 
-export const {
-  selectUser,
-  selectIsAuthTokenChecked,
-  selectIsAuthenticated,
-  selectUserError,
-  selectIsUserDataLoaded
-} = userSlice.selectors;
+const selectUserSlice = (state: any) => state.user;
+
+export const selectUser = createSelector(
+  [selectUserSlice],
+  (userSlice) => userSlice.user
+);
+export const selectIsAuthTokenChecked = createSelector(
+  [selectUserSlice],
+  (userSlice) => userSlice.isAuthTokenChecked
+);
+export const selectIsAuthenticated = createSelector(
+  [selectUserSlice],
+  (userSlice) => userSlice.isAuthenticated
+);
+export const selectUserError = createSelector(
+  [selectUserSlice],
+  (userSlice) => userSlice.error
+);
+export const selectIsUserDataLoaded = createSelector(
+  [selectUserSlice],
+  (userSlice) => userSlice.isDataLoaded
+);
 
 export const { removeError } = userSlice.actions;
 

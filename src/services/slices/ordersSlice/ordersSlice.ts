@@ -1,10 +1,15 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import {
+  createAsyncThunk,
+  createSelector,
+  createSlice
+} from '@reduxjs/toolkit';
 
 import { getOrdersApi, getOrderByNumberApi, orderBurgerApi } from '@api';
 import { TOrder } from '@utils-types';
 import { API_ERROR } from '../../../utils/constants';
+import { RootState } from '@store';
 
-type TOrdersSliceState = {
+export type TOrdersSliceState = {
   orders: TOrder[];
   order: TOrder | null;
   error: string | null | undefined;
@@ -26,12 +31,12 @@ export const ordersSlice = createSlice({
       state.order = null;
     }
   },
-  selectors: {
-    selectOrders: (state) => state.orders,
-    selectOrder: (state) => state.order,
-    selectOrdersError: (state) => state.error,
-    selectIsOrdersLoaded: (state) => state.isLoaded
-  },
+  // selectors: {
+  //   selectOrders: (state) => state.orders,
+  //   selectOrder: (state) => state.order,
+  //   selectOrdersError: (state) => state.error,
+  //   selectIsOrdersLoaded: (state) => state.isLoaded
+  // },
   extraReducers(builder) {
     builder
 
@@ -120,11 +125,25 @@ export const createNewOrder = createAsyncThunk(
 
 export const { clearOrderState } = ordersSlice.actions;
 
-export const {
-  selectOrders,
-  selectOrder,
-  selectOrdersError,
-  selectIsOrdersLoaded
-} = ordersSlice.selectors;
+const selectOrdersSlice = (state: RootState) => state.orders;
 
+export const selectOrders = createSelector(
+  [selectOrdersSlice],
+  (slice) => slice.orders
+);
+export const selectOrder = createSelector(
+  [selectOrdersSlice],
+  (slice) => slice.order
+); 
+export const selectOrdersError = createSelector(
+  [selectOrdersSlice],
+  (slice) => slice.error
+);
+export const selectIsOrdersLoaded = createSelector(
+  [selectOrdersSlice],
+  (slice) => slice.isLoaded
+);
+
+
+const selectFeedSlice = (state: RootState) => state.feed;
 export const ordersSliceReducer = ordersSlice.reducer;

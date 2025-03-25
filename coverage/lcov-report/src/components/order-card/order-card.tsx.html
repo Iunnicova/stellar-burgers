@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/59</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/59</span>
             </div>
         
             
@@ -57,7 +57,7 @@
         <template id="filterTemplate">
             <div class="quiet">
                 Filter:
-                <input oninput="onInput()" type="search" id="fileSearch">
+                <input type="search" id="fileSearch">
             </div>
         </template>
     </div>
@@ -122,124 +122,124 @@
 <a name='L57'></a><a href='#L57'>57</a>
 <a name='L58'></a><a href='#L58'>58</a>
 <a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L60'></a><a href='#L60'>60</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { FC, memo, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
-&nbsp;
-import { OrderCardUI } from '../ui/order-card';
-import { OrderCardProps } from './type';
-import { TIngredient } from '@utils-types';
-import { useSelector } from '@store';
-import { selectIngredients } from '@slices';
-&nbsp;
-const maxIngredients = <span class="cstat-no" title="statement not covered" >6;</span>
-&nbsp;
-export const OrderCard: FC&lt;OrderCardProps&gt; = <span class="cstat-no" title="statement not covered" >memo(<span class="fstat-no" title="function not covered" >({</span> order }) =&gt; {</span>
-  const location = <span class="cstat-no" title="statement not covered" >useLocation();</span>
-&nbsp;
-  const ingredients: TIngredient[] = <span class="cstat-no" title="statement not covered" >useSelector(selectIngredients);</span>
-&nbsp;
-  const orderInfo = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!ingredients.length) <span class="cstat-no" title="statement not covered" >return null;</span></span>
-&nbsp;
-    const ingredientsInfo = <span class="cstat-no" title="statement not covered" >order.ingredients.reduce(</span>
-<span class="fstat-no" title="function not covered" >      (a</span>cc: TIngredient[], item: string) =&gt; {
-        const ingredient = <span class="cstat-no" title="statement not covered" >ingredients.find(<span class="fstat-no" title="function not covered" >(i</span>ng) =&gt; <span class="cstat-no" title="statement not covered" >ing._id === item)</span>;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >        if (ingredient) <span class="cstat-no" title="statement not covered" >return [...acc, ingredient];</span></span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >import { FC, memo, useMemo } from 'react';</span></span></span>
+<span class="cstat-no" title="statement not covered" >import { useLocation } from 'react-router-dom';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >import { OrderCardUI } from '../ui/order-card';</span>
+<span class="cstat-no" title="statement not covered" >import { OrderCardProps } from './type';</span>
+<span class="cstat-no" title="statement not covered" >import { TIngredient } from '@utils-types';</span>
+<span class="cstat-no" title="statement not covered" >import { useSelector } from '@store';</span>
+<span class="cstat-no" title="statement not covered" >import { selectIngredients } from '@slices';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >const maxIngredients = 6;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >export const OrderCard: FC&lt;OrderCardProps&gt; = memo(({ order }) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  const location = useLocation();</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  const ingredients: TIngredient[] = useSelector(selectIngredients);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  const orderInfo = useMemo(() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (!ingredients.length) return null;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    const ingredientsInfo = order.ingredients.reduce(</span>
+<span class="cstat-no" title="statement not covered" >      (acc: TIngredient[], item: string) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        const ingredient = ingredients.find((ing) =&gt; ing._id === item);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        if (ingredient) return [...acc, ingredient];</span>
 <span class="cstat-no" title="statement not covered" >        return acc;</span>
-      },
-      []
-    );
-&nbsp;
-    const total = <span class="cstat-no" title="statement not covered" >ingredientsInfo.reduce(<span class="fstat-no" title="function not covered" >(a</span>cc, item) =&gt; <span class="cstat-no" title="statement not covered" >acc + item.price,</span> 0);</span>
-&nbsp;
-    const ingredientsToShow = <span class="cstat-no" title="statement not covered" >ingredientsInfo.slice(0, maxIngredients);</span>
-&nbsp;
-    const remains =
+<span class="cstat-no" title="statement not covered" >      },</span>
+<span class="cstat-no" title="statement not covered" >      []</span>
+<span class="cstat-no" title="statement not covered" >    );</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    const total = ingredientsInfo.reduce((acc, item) =&gt; acc + item.price, 0);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    const ingredientsToShow = ingredientsInfo.slice(0, maxIngredients);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    const remains =</span>
 <span class="cstat-no" title="statement not covered" >      ingredientsInfo.length &gt; maxIngredients</span>
-        ? ingredientsInfo.length - maxIngredients
-        : 0;
-&nbsp;
-    const date = <span class="cstat-no" title="statement not covered" >new Date(order.createdAt);</span>
+<span class="cstat-no" title="statement not covered" >        ? ingredientsInfo.length - maxIngredients</span>
+<span class="cstat-no" title="statement not covered" >        : 0;</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >    const date = new Date(order.createdAt);</span>
 <span class="cstat-no" title="statement not covered" >    return {</span>
-      ...order,
-      ingredientsInfo,
-      ingredientsToShow,
-      remains,
-      total,
-      date
-    };
-  }, [order, ingredients]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  if (!orderInfo) <span class="cstat-no" title="statement not covered" >return null;</span></span>
-&nbsp;
+<span class="cstat-no" title="statement not covered" >      ...order,</span>
+<span class="cstat-no" title="statement not covered" >      ingredientsInfo,</span>
+<span class="cstat-no" title="statement not covered" >      ingredientsToShow,</span>
+<span class="cstat-no" title="statement not covered" >      remains,</span>
+<span class="cstat-no" title="statement not covered" >      total,</span>
+<span class="cstat-no" title="statement not covered" >      date</span>
+<span class="cstat-no" title="statement not covered" >    };</span>
+<span class="cstat-no" title="statement not covered" >  }, [order, ingredients]);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  if (!orderInfo) return null;</span>
+<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;OrderCardUI
-      orderInfo={orderInfo}
-      maxIngredients={maxIngredients}
-      locationState={{ background: location }}
-    /&gt;
-  );
-});
+<span class="cstat-no" title="statement not covered" >    &lt;OrderCardUI</span>
+<span class="cstat-no" title="statement not covered" >      orderInfo={orderInfo}</span>
+<span class="cstat-no" title="statement not covered" >      maxIngredients={maxIngredients}</span>
+<span class="cstat-no" title="statement not covered" >      locationState={{ background: location }}</span>
+<span class="cstat-no" title="statement not covered" >    /&gt;</span>
+<span class="cstat-no" title="statement not covered" >  );</span>
+<span class="cstat-no" title="statement not covered" >});</span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -247,7 +247,7 @@ export const OrderCard: FC&lt;OrderCardProps&gt; = <span class="cstat-no" title=
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-21T16:09:27.658Z
+                at 2025-03-25T12:23:43.174Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

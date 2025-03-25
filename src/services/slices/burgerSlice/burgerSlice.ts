@@ -1,4 +1,10 @@
-import { createSlice, PayloadAction, nanoid } from '@reduxjs/toolkit';
+import {
+  createSlice,
+  PayloadAction,
+  nanoid,
+  createSelector
+} from '@reduxjs/toolkit';
+import { RootState } from '@store';
 
 import { TConstructorIngredient, TIngredient } from '@utils-types';
 
@@ -83,11 +89,11 @@ export const burgerSlice = createSlice({
       state.ingredients.splice(dragIndex, 1);
       state.ingredients.splice(hoverIndex, 0, dragIngredient);
     }
-  },
-  selectors: {
-    selectBun: (state) => state.bun,
-    selectIngredientConstructor: (state) => state.ingredients
   }
+  // selectors: {
+  //   selectBun: (state) => state.bun,
+  //   selectIngredientConstructor: (state) => state.ingredients
+  // }
 });
 
 export const {
@@ -98,6 +104,16 @@ export const {
   moveIngredientDown
 } = burgerSlice.actions;
 
-export const { selectBun, selectIngredientConstructor } = burgerSlice.selectors;
+const selectBurgerSlice = (state: RootState) => state.burger;
+
+export const selectBun = createSelector(
+  [selectBurgerSlice],
+  (burger) => burger.bun
+);
+
+export const selectIngredientConstructor = createSelector(
+  [selectBurgerSlice],
+  (burger) => burger.ingredients
+);
 
 export const burgerSliceReducer = burgerSlice.reducer;

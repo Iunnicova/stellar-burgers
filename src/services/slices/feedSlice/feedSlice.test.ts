@@ -1,85 +1,119 @@
-import { describe, expect, test } from '@jest/globals';
-import { feedSliceReducer, getAllOrdersData } from './feedSlice';
-import { initialState } from './feedSlice';
-import { API_ERROR } from '../../../utils/constants';
+import { configureStore } from '@reduxjs/toolkit';
+import {
+  feedSliceReducer,
+  getAllOrdersData,
+  initialState,
+  selectAllOrders,
+  selectFeedError,
+  selectIsFeedLoaded,
+  selectTotalOrders,
+  selectTotalOrdersToday
+} from './feedSlice';
+import { getFeedsApi } from '@api';
+import { TOrder } from '@utils-types';
+
+jest.mock('@api', () => ({
+  getFeedsApi: jest.fn()
+}));
 
 describe('feedSlice', () => {
-  test('должен возвращать initial state', () => {
-    expect(feedSliceReducer(undefined, { type: 'UNKNOWN' })).toEqual(
-      initialState
-    );
-  });
+  let store: any;
 
-  test('должен обрабатывать pending состояние', () => {
-    const nextState = feedSliceReducer(initialState, {
-      type: getAllOrdersData.pending.type
+  beforeEach(() => {
+    store = configureStore({
+      reducer: {
+        feed: feedSliceReducer
+      }
     });
-    expect(nextState.isFeedLoaded).toBe(true);
-    expect(nextState.error).toBeNull();
   });
 
-  // test('должен обрабатывать fulfilled состояние', () => {
-  //   const payload = {
-  //     orders: [],
-  //     total: 0,
-  //     totalToday: 0
-  //   };
-  //   const action = {
-  //     type: getAllOrdersData.fulfilled.type,
-  //     payload
-  //   };
-  //   const nextState = feedSliceReducer(initialState, action);
-  //   expect(nextState.orders).toEqual(action.payload.orders);
-  //   expect(nextState.totalOrders).toEqual(action.payload.total);
-  //   expect(nextState.totalOrdersToday).toEqual(action.payload.totalToday);
-  //   expect(nextState.isFeedLoaded).toBe(false);
-  // });
-  test('должен обрабатывать fulfilled состояние', () => {
-    const payload = {
-      orders: [
-        {
-          _id: '1',
-          ingredients: [],
-          name: 'Order 1',
-          number: 1,
-          status: 'done',
-          createdAt: '',
-          updatedAt: ''
-        }
-      ],
-      total: 100,
-      totalToday: 10
-    };
-    const action = {
-      type: getAllOrdersData.fulfilled.type,
-      payload
-    };
-    const nextState = feedSliceReducer(initialState, action);
-
-    // Проверяем, что заказы, общее количество и количество за сегодня обновляются
-    expect(nextState.orders).toEqual(payload.orders);
-    expect(nextState.totalOrders).toEqual(payload.total);
-    expect(nextState.totalOrdersToday).toEqual(payload.totalToday);
-    expect(nextState.isFeedLoaded).toBe(true);
-    expect(nextState.error).toBe('');
+  it('should have correct initial state', () => {
+    const state = store.getState().feed;
+    expect(state).toEqual(initialState);
   });
 
-  test('должен обрабатывать rejected состояние', () => {
-    const errorMessage = 'Запрос не выполнен';
-    const nextState = feedSliceReducer(initialState, {
-      type: getAllOrdersData.rejected.type,
-      error: { message: errorMessage }
+  it('should handle getAllOrdersData.pending', async () => {
+    const initialStateBeforeDispatch = store.getState().feed;
+
+    const dispatchResult = store.dispatch(getAllOrdersData());
+
+    await dispatchResult;
+
+    const state = store.getState().feed;
+
+    expect(initialStateBeforeDispatch.error).toBe(null);
+    expect(state.isFeedLoaded).toBe(false);
+  });
+
+  it('should handle getAllOrdersData.fulfilled', async () => {
+    const mockOrders: TOrder[] = [
+      {
+        _id: '1',
+        ingredients: [],
+        name: 'Order 1',
+        status: 'done',
+        createdAt: '',
+        updatedAt: '',
+        number: 123
+      },
+      {
+        _id: '2',
+        ingredients: [],
+        name: 'Order 2',
+        status: 'pending',
+        createdAt: '',
+        updatedAt: '',
+        number: 456
+      }
+    ];
+    const mockTotal = 100;
+    const mockTotalToday = 10;
+
+    (getFeedsApi as jest.Mock).mockResolvedValue({
+      success: true,
+      orders: mockOrders,
+      total: mockTotal,
+      totalToday: mockTotalToday
     });
-    expect(nextState.isFeedLoaded).toBe(false);
-    expect(nextState.error).toBe(errorMessage);
+
+    await store.dispatch(getAllOrdersData());
+
+    const state = store.getState().feed;
+    expect(state.orders).toEqual(mockOrders);
+    expect(state.totalOrders).toBe(mockTotal);
+    expect(state.totalOrdersToday).toBe(mockTotalToday);
+    expect(state.isFeedLoaded).toBe(true);
+    expect(state.error).toBeNull();
   });
 
-  it('должен обрабатывать rejected состояние с API_ERROR', () => {
-    const nextState = feedSliceReducer(initialState, {
-      type: getAllOrdersData.rejected.type,
-      error: { message: undefined }
-    });
-    expect(nextState.isFeedLoaded).toBe(false);
-    expect(nextState.error).toBe(API_ERROR);
+  it('should handle getAllOrdersData.rejected', async () => {
+    const mockError = { success: false, message: 'API Error' };
+    (getFeedsApi as jest.Mock).mockRejectedValue(mockError);
+
+    await store.dispatch(getAllOrdersData());
+
+    const state = store.getState().feed;
+    expect(state.error).toBe('API Error');
+    expect(state.isFeedLoaded).toBe(false);
+  });
+
+  it('should select total orders correctly', () => {
+    const mockState = { feed: { ...initialState, totalOrders: 100 } };
+    expect(selectTotalOrders(mockState as any)).toBe(100);
+  });
+
+  it('should select total orders today correctly', () => {
+    const mockState = { feed: { ...initialState, totalOrdersToday: 10 } };
+    expect(selectTotalOrdersToday(mockState as any)).toBe(10);
+  });
+
+  it('should select feed error correctly', () => {
+    const mockState = { feed: { ...initialState, error: 'Test Error' } };
+    expect(selectFeedError(mockState as any)).toBe('Test Error');
+  });
+
+  it('should select isFeedLoaded correctly', () => {
+    const mockState = { feed: { ...initialState, isFeedLoaded: true } };
+    expect(selectIsFeedLoaded(mockState as any)).toBe(true);
   });
 });

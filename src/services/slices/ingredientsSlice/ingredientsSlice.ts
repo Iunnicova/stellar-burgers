@@ -1,10 +1,16 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+  createAsyncThunk,
+  createSelector,
+  createSlice,
+  PayloadAction
+} from '@reduxjs/toolkit';
 
 import { getIngredientsApi } from '@api';
 import { TIngredient } from '@utils-types';
 import { API_ERROR } from '../../../utils/constants';
+import { RootState } from '@store';
 
-type TIngredientsSliceState = {
+export type TIngredientsSliceState = {
   ingredients: TIngredient[];
   error: string | null | undefined;
   isLoaded: boolean;
@@ -20,11 +26,11 @@ export const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState,
   reducers: {},
-  selectors: {
-    selectIngredients: (state) => state.ingredients,
-    selectError: (state) => state.error,
-    selectIsLoaded: (state) => state.isLoaded
-  },
+  // selectors: {
+  //   selectIngredients: (state) => state.ingredients,
+  //   selectError: (state) => state.error,
+  //   selectIsLoaded: (state) => state.isLoaded
+  // },
   extraReducers(builder) {
     builder
       .addCase(getIngredients.pending, (state) => {
@@ -65,7 +71,21 @@ export const getIngredients = createAsyncThunk(
   }
 );
 
-export const { selectIngredients, selectError, selectIsLoaded } =
-  ingredientsSlice.selectors;
+const selectIngredientsSlice = (state: RootState) => state.ingredients;
+
+export const selectIngredients = createSelector(
+  [selectIngredientsSlice],
+  (ingredients) => ingredients.ingredients
+);
+
+export const selectError = createSelector(
+  [selectIngredientsSlice],
+  (ingredients) => ingredients.error
+);
+
+export const selectIsLoaded = createSelector(
+  [selectIngredientsSlice],
+  (ingredients) => ingredients.isLoaded
+);
 
 export const ingredientsSliceReducer = ingredientsSlice.reducer;
