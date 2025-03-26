@@ -134,7 +134,7 @@ export const selectOrders = createSelector(
 export const selectOrder = createSelector(
   [selectOrdersSlice],
   (slice) => slice.order
-); 
+);
 export const selectOrdersError = createSelector(
   [selectOrdersSlice],
   (slice) => slice.error
@@ -143,7 +143,6 @@ export const selectIsOrdersLoaded = createSelector(
   [selectOrdersSlice],
   (slice) => slice.isLoaded
 );
-
 
 const selectFeedSlice = (state: RootState) => state.feed;
 export const ordersSliceReducer = ordersSlice.reducer;

@@ -107,7 +107,9 @@ const config: JestConfigWithTsJest = {
 
   // A preset that is used as a base for Jest's configuration
   // preset: undefined,
-  preset: 'ts-jest',
+
+  // preset: 'ts-jest',
+  preset: 'ts-jest/presets/default-esm',
 
   // Run tests from one or more projects
   // projects: undefined,
@@ -225,47 +227,55 @@ module.exports = {
   //   '!<rootDir>/path/to/ignore.js'
   // ],
 
-  testEnvironment: 'jest-environment-jsdom',
-
-  preset: 'ts-jest',
-  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
+  // testEnvironment: 'jest-environment-jsdom',
+  testEnvironment: 'node',
+  extensionsToTreatAsEsm: ['.ts'],
   // testEnvironment: 'jsdom',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest'
-  },
+
   moduleNameMapper: {
-    // '^@api(.*)$': '<rootDir>/src/utils/burger-api.ts$1',
-
-    // '^@store(.*)$': '<rootDir>/src/store$1',
-    // '^@api(.*)$': '<rootDir>/src/api$1',
-    // '^@utils-types(.*)$': '<rootDir>/src/utils-types$1',
-    // '^@slices(.*)$': '<rootDir>/src/services/slices$1',
-    // '^@utils-cookie(.*)$': '<rootDir>/src/utils/cookie$1'
-
     '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
     '^.+\\.(css|sass|scss)$': '<rootDir>/__mocks__/styleMock.js',
 
-    // '^@store(.*)$': '<rootDir>/src',
-    '^@components(.*)$': '<rootDir>/src',
-    '^@pages(.*)$': '<rootDir>/src',
-    '^@api(.*)$': '<rootDir>/src',
-    '^@utils-types(.*)$': '<rootDir>/src',
-    '^@slices(.*)$': '<rootDir>/src',
-    '^@utils-cookie(.*)$': '<rootDir>/src'
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+    '^@store(.*)$': '<rootDir>/src/store$1',
+    '^@components(.*)$': '<rootDir>/src/components$1',
+    '^@pages(.*)$': '<rootDir>/src/pages$1',
+    '^@api(.*)$': '<rootDir>/src/utils/burger-api$1',
+    '^@utils-types(.*)$': '<rootDir>/src/utils-types$1',
+    '^@slices(.*)$': '<rootDir>/src/services/slices$1',
+    '^@utils-cookie(.*)$': '<rootDir>/src/utils/cookie$1'
   },
-  resolver: undefined,
-  coverageDirectory: 'coverage',
-  coverageProvider: 'v8'
-};
-export default {
-  preset: 'ts-jest/presets/default-esm',
-  testEnvironment: 'node',
-  extensionsToTreatAsEsm: ['.ts'],
+
+  transform: {
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        useESM: true
+      }
+    ]
+  },
+
   globals: {
     'ts-jest': {
       useESM: true
     }
-  }
+  },
+
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
+  collectCoverage: true,
+  coverageDirectory: 'coverage',
+  coverageProvider: 'v8'
 };
-// export default config;
+
+// export default {
+//   preset: 'ts-jest/presets/default-esm',
+//   testEnvironment: 'node',
+//   extensionsToTreatAsEsm: ['.ts'],
+//   globals: {
+//     'ts-jest': {
+//       useESM: true
+//     }
+//   }
+// };
+export default config;

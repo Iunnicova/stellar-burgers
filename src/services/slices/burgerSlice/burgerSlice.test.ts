@@ -229,7 +229,7 @@ describe('Тестирование селекторов', () => {
     mockState = store.getState() as RootState;
   });
 
-  it('должен возвращать булку', () => {
+  test('должен возвращать булку', () => {
     const bun = createMockConstructorIngredient({
       type: 'bun',
       name: 'Флюоресцентная булка R2-D3',
@@ -239,7 +239,7 @@ describe('Тестирование селекторов', () => {
     expect.objectContaining({ ...bun, id: expect.any(String) });
   });
 
-  it('должен возвращать список ингредиентов', () => {
+  test('должен возвращать список ингредиентов', () => {
     const ingredient = createMockConstructorIngredient({
       type: 'sauce',
       name: 'Соус с шипами Антарианского плоскоходца',

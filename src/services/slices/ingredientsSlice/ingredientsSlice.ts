@@ -26,11 +26,7 @@ export const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState,
   reducers: {},
-  // selectors: {
-  //   selectIngredients: (state) => state.ingredients,
-  //   selectError: (state) => state.error,
-  //   selectIsLoaded: (state) => state.isLoaded
-  // },
+
   extraReducers(builder) {
     builder
       .addCase(getIngredients.pending, (state) => {

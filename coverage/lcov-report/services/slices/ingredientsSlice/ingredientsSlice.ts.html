@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">78.72% </span>
+                <span class="strong">82.75% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>74/94</span>
+                <span class='fraction'>72/87</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/3</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/5</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">78.72% </span>
+                <span class="strong">82.75% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>74/94</span>
+                <span class='fraction'>72/87</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -150,15 +150,7 @@
 <a name='L85'></a><a href='#L85'>85</a>
 <a name='L86'></a><a href='#L86'>86</a>
 <a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a>
-<a name='L92'></a><a href='#L92'>92</a>
-<a name='L93'></a><a href='#L93'>93</a>
-<a name='L94'></a><a href='#L94'>94</a>
-<a name='L95'></a><a href='#L95'>95</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<a name='L88'></a><a href='#L88'>88</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -193,19 +185,16 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -225,12 +214,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -252,7 +238,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import {
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  createAsyncThunk,</span></span>
+  createAsyncThunk,
   createSelector,
   createSlice,
   PayloadAction
@@ -263,7 +249,7 @@ import { TIngredient } from '@utils-types';
 import { API_ERROR } from '../../../utils/constants';
 import { RootState } from '@store';
 &nbsp;
-type TIngredientsSliceState = {
+export type TIngredientsSliceState = {
   ingredients: TIngredient[];
   error: string | null | undefined;
   isLoaded: boolean;
@@ -279,34 +265,30 @@ export const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState,
   reducers: {},
-  // selectors: {
-  //   selectIngredients: (state) =&gt; state.ingredients,
-  //   selectError: (state) =&gt; state.error,
-  //   selectIsLoaded: (state) =&gt; state.isLoaded
-  // },
+&nbsp;
   extraReducers(builder) {
     builder
       .addCase(getIngredients.pending, (state) =&gt; {
-<span class="cstat-no" title="statement not covered" >        state.isLoaded = true;</span>
-<span class="cstat-no" title="statement not covered" >        state.error = null;</span>
+        state.isLoaded = true;
+        state.error = null;
       })
       .addCase(
         getIngredients.fulfilled,
         (state, action: PayloadAction&lt;TIngredient[]&gt;) =&gt; {
-<span class="cstat-no" title="statement not covered" >          state.ingredients = action.payload;</span>
-<span class="cstat-no" title="statement not covered" >          state.isLoaded = false;</span>
-<span class="cstat-no" title="statement not covered" >        }</span>
+          state.ingredients = action.payload;
+          state.isLoaded = false;
+        }
       )
       .addCase(getIngredients.rejected, (state, action) =&gt; {
-<span class="cstat-no" title="statement not covered" >        state.isLoaded = false;</span>
-<span class="cstat-no" title="statement not covered" >        state.error = (action.payload as string) || API_ERROR;</span>
+        state.isLoaded = false;
+        state.error = (action.payload as string) || API_ERROR;
       });
   }
 });
 &nbsp;
 export const getIngredients = createAsyncThunk(
   'ingredients/getIngredients',
-<span class="fstat-no" title="function not covered" >  async (_, { rejectWithValue }) =&gt; {</span>
+  async (_, { rejectWithValue }) =&gt; {
 <span class="cstat-no" title="statement not covered" >    try {</span>
 <span class="cstat-no" title="statement not covered" >      const response = await getIngredientsApi();</span>
 <span class="cstat-no" title="statement not covered" >      return response;</span>
@@ -319,16 +301,13 @@ export const getIngredients = createAsyncThunk(
 <span class="cstat-no" title="statement not covered" >        return rejectWithValue(error.response.data.message);</span>
 <span class="cstat-no" title="statement not covered" >      } else {</span>
 <span class="cstat-no" title="statement not covered" >        return rejectWithValue(error.message || API_ERROR);</span>
-      }
-    }
-  }
+<span class="cstat-no" title="statement not covered" >      }</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
 );
 &nbsp;
-// export const { selectIngredients, selectError, selectIsLoaded } =
-//   ingredientsSlice.selectors;
-const selectIngredientsSlice = <span class="fstat-no" title="function not covered" >(state: RootState) =&gt; state.ingredients;</span>
+const selectIngredientsSlice = (state: RootState) =&gt; state.ingredients;
 &nbsp;
-// Селекторы для отдельных частей состояния
 export const selectIngredients = createSelector(
   [selectIngredientsSlice],
   (ingredients) =&gt; ingredients.ingredients
@@ -352,7 +331,7 @@ export const ingredientsSliceReducer = ingredientsSlice.reducer;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-25T08:59:28.351Z
+                at 2025-03-26T18:56:28.264Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

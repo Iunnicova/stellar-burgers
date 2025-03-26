@@ -3,8 +3,12 @@ import { TIngredient, TOrder, TOrdersData, TUser } from './types';
 
 export const URL = process.env.BURGER_API_URL;
 
-const checkResponse = <T>(res: Response): Promise<T> =>
-  res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
+export const checkResponse = <T>(res: Response): Promise<T> => {
+  if (res.ok) {
+    return res.json();
+  }
+  return res.json().then((err) => Promise.reject(err));
+};
 
 type TServerResponse<T> = {
   success: boolean;
@@ -15,7 +19,7 @@ type TRefreshResponse = TServerResponse<{
   accessToken: string;
 }>;
 
-export const refreshToken = (): Promise<TRefreshResponse> =>
+export const refreshToken = () =>
   fetch(`${URL}/auth/token`, {
     method: 'POST',
     headers: {
@@ -25,14 +29,18 @@ export const refreshToken = (): Promise<TRefreshResponse> =>
       token: localStorage.getItem('refreshToken')
     })
   })
-    .then((res) => checkResponse<TRefreshResponse>(res))
-    .then((refreshData) => {
-      if (!refreshData.success) {
-        return Promise.reject(refreshData);
-      }
-      localStorage.setItem('refreshToken', refreshData.refreshToken);
-      setCookie('accessToken', refreshData.accessToken);
-      return refreshData;
+    .then((res) => checkResponse<TAuthResponse>(res))
+    .then((data) => {
+      setCookie('accessToken', data.accessToken);
+      return data;
+    })
+    .then((data) => {
+      localStorage.setItem('refreshToken', data.refreshToken);
+      return data;
+    })
+    .catch((err) => {
+      console.error('Ошибка при обновлении токена:', err);
+      throw err;
     });
 
 export const fetchWithRefresh = async <T>(
@@ -213,15 +221,21 @@ export const getUserApi = () =>
     } as HeadersInit
   });
 
-export const updateUserApi = (user: Partial<TRegisterData>) =>
-  fetchWithRefresh<TUserResponse>(`${URL}/auth/user`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json;charset=utf-8',
-      authorization: getCookie('accessToken')
-    } as HeadersInit,
-    body: JSON.stringify(user)
-  });
+export const updateUserApi = (user: Partial<TRegisterData>) => {
+  try {
+    return fetchWithRefresh<TUserResponse>(`${URL}/auth/user`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+        authorization: `Bearer ${getCookie('accessToken')}`
+      } as HeadersInit,
+      body: JSON.stringify(user)
+    });
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
 
 export const logoutApi = () =>
   fetch(`${URL}/auth/logout`, {

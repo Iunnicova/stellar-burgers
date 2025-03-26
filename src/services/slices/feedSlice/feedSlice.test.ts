@@ -27,12 +27,12 @@ describe('feedSlice', () => {
     });
   });
 
-  it('should have correct initial state', () => {
+  test('should have correct initial state', () => {
     const state = store.getState().feed;
     expect(state).toEqual(initialState);
   });
 
-  it('should handle getAllOrdersData.pending', async () => {
+  test('should handle getAllOrdersData.pending', async () => {
     const initialStateBeforeDispatch = store.getState().feed;
 
     const dispatchResult = store.dispatch(getAllOrdersData());
@@ -45,7 +45,7 @@ describe('feedSlice', () => {
     expect(state.isFeedLoaded).toBe(false);
   });
 
-  it('should handle getAllOrdersData.fulfilled', async () => {
+  test('should handle getAllOrdersData.fulfilled', async () => {
     const mockOrders: TOrder[] = [
       {
         _id: '1',
@@ -86,7 +86,7 @@ describe('feedSlice', () => {
     expect(state.error).toBeNull();
   });
 
-  it('should handle getAllOrdersData.rejected', async () => {
+  test('should handle getAllOrdersData.rejected', async () => {
     const mockError = { success: false, message: 'API Error' };
     (getFeedsApi as jest.Mock).mockRejectedValue(mockError);
 
@@ -97,22 +97,22 @@ describe('feedSlice', () => {
     expect(state.isFeedLoaded).toBe(false);
   });
 
-  it('should select total orders correctly', () => {
+  test('should select total orders correctly', () => {
     const mockState = { feed: { ...initialState, totalOrders: 100 } };
     expect(selectTotalOrders(mockState as any)).toBe(100);
   });
 
-  it('should select total orders today correctly', () => {
+  test('should select total orders today correctly', () => {
     const mockState = { feed: { ...initialState, totalOrdersToday: 10 } };
     expect(selectTotalOrdersToday(mockState as any)).toBe(10);
   });
 
-  it('should select feed error correctly', () => {
+  test('should select feed error correctly', () => {
     const mockState = { feed: { ...initialState, error: 'Test Error' } };
     expect(selectFeedError(mockState as any)).toBe('Test Error');
   });
 
-  it('should select isFeedLoaded correctly', () => {
+  test('should select isFeedLoaded correctly', () => {
     const mockState = { feed: { ...initialState, isFeedLoaded: true } };
     expect(selectIsFeedLoaded(mockState as any)).toBe(true);
   });
