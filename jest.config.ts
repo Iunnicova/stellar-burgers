@@ -226,11 +226,12 @@ module.exports = {
   //   '!<rootDir>/node_modules/',
   //   '!<rootDir>/path/to/ignore.js'
   // ],
-
+  preset: 'ts-jest',
   // testEnvironment: 'jest-environment-jsdom',
-  testEnvironment: 'node',
+  testEnvironment: 'jsdom',
+  // testEnvironment: 'node',
   extensionsToTreatAsEsm: ['.ts'],
-  // testEnvironment: 'jsdom',
+ 
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
 
   moduleNameMapper: {
@@ -247,13 +248,17 @@ module.exports = {
     '^@utils-cookie(.*)$': '<rootDir>/src/utils/cookie$1'
   },
 
+  // transform: {
+  //   '^.+\\.tsx?$': [
+  //     'ts-jest',
+  //     {
+  //       useESM: true
+  //     }
+  //   ]
+  // },
+
   transform: {
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        useESM: true
-      }
-    ]
+    '^.+\\.ts$': ['ts-jest'],
   },
 
   globals: {
