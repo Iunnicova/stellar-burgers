@@ -54,9 +54,11 @@ export const userSlice = createSlice({
         state.user = action.payload.user;
         state.isDataLoaded = false;
       })
+
       .addCase(registerUser.rejected, (state, action) => {
-        state.error = action.error.message || API_ERROR;
-        state.isDataLoaded = false;
+        state.error = (action.payload as string) || null;
+        state.isAuthenticated = false;
+        state.user = null;
       })
       // Авторизация пользователя
       .addCase(loginUser.pending, (state) => {
@@ -69,10 +71,10 @@ export const userSlice = createSlice({
         state.user = action.payload.user;
         state.isDataLoaded = false;
       })
+
       .addCase(loginUser.rejected, (state, action) => {
-        state.isAuthTokenChecked = true;
-        state.error = action.error.message || API_ERROR;
-        state.isDataLoaded = false;
+        const payload = action.payload as { message?: string } | undefined;
+        state.error = payload?.message || 'Login failed';
       })
       // Получение данных пользователя
       .addCase(getDataUser.pending, (state) => {
@@ -117,35 +119,57 @@ export const userSlice = createSlice({
         state.isDataLoaded = false;
       })
       .addCase(userLogout.rejected, (state, action) => {
-        state.error = action.error.message || API_ERROR;
-        state.isDataLoaded = false;
+        state.error = action.payload ?? 'Logout failed';
+        state.isAuthenticated = false;
       });
   }
 });
 
+export default userSlice.reducer;
+
 export const registerUser = createAsyncThunk(
   'user/registerUser',
-  async (dataUser: TRegisterData, { rejectWithValue }) => {
-    const response = await registerUserApi(dataUser);
-    if (!response.success) {
-      return rejectWithValue(response);
+  async (
+    userData: { email: string; password: string; name: string },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await registerUserApi(userData);
+
+      if (!response.success) {
+        return rejectWithValue(response);
+      }
+
+      setCookie('accessToken', response.accessToken);
+      localStorage.setItem('refreshToken', response.refreshToken);
+
+      return response;
+    } catch (error: any) {
+      console.error(' registerUser error:', error);
+      return rejectWithValue(error?.message || 'Unknown error');
     }
-    setCookie('accessToken', response.accessToken);
-    localStorage.setItem('refreshToken', response.refreshToken);
-    return response;
   }
 );
 
 export const loginUser = createAsyncThunk(
   'user/loginUser',
   async (dataUser: Omit<TRegisterData, 'name'>, { rejectWithValue }) => {
-    const response = await loginUserApi(dataUser);
-    if (!response.success) {
-      return rejectWithValue(response);
+    try {
+      const response = await loginUserApi(dataUser);
+
+      if (!response.success) {
+        return rejectWithValue({ message: response.message || 'Login failed' });
+      }
+
+      setCookie('accessToken', response.accessToken);
+      localStorage.setItem('refreshToken', response.refreshToken);
+
+      return response;
+    } catch (error) {
+      return rejectWithValue({
+        message: (error as Error).message || 'Login failed'
+      });
     }
-    setCookie('accessToken', response.accessToken);
-    localStorage.setItem('refreshToken', response.refreshToken);
-    return response;
   }
 );
 
@@ -171,17 +195,26 @@ export const updateDataUser = createAsyncThunk(
   }
 );
 
-export const userLogout = createAsyncThunk(
-  'user/userLogout',
-  async (_, { rejectWithValue }) => {
-    const response = await logoutApi();
+export const userLogout = createAsyncThunk<
+  string,
+  void,
+  { rejectValue: string }
+>('user/userLogout', async (_, { rejectWithValue }) => {
+  try {
+    const response: { success: boolean; message?: string } = await logoutApi();
+
     if (!response.success) {
-      return rejectWithValue(response);
+      return rejectWithValue(response.message || 'Logout failed');
     }
+
     deleteCookie('accessToken');
-    localStorage.clear();
+    localStorage.removeItem('refreshToken');
+
+    return 'Logout successful';
+  } catch (error: any) {
+    return rejectWithValue(error.message || 'Logout failed');
   }
-);
+});
 
 const selectUserSlice = (state: any) => state.user;
 

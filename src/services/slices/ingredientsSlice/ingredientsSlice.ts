@@ -10,7 +10,7 @@ import { TIngredient } from '@utils-types';
 import { API_ERROR } from '../../../utils/constants';
 import { RootState } from '@store';
 
-export type TIngredientsSliceState = {
+type TIngredientsSliceState = {
   ingredients: TIngredient[];
   error: string | null | undefined;
   isLoaded: boolean;
@@ -26,7 +26,11 @@ export const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState,
   reducers: {},
-
+  // selectors: {
+  //   selectIngredients: (state) => state.ingredients,
+  //   selectError: (state) => state.error,
+  //   selectIsLoaded: (state) => state.isLoaded
+  // },
   extraReducers(builder) {
     builder
       .addCase(getIngredients.pending, (state) => {
@@ -67,8 +71,11 @@ export const getIngredients = createAsyncThunk(
   }
 );
 
+// export const { selectIngredients, selectError, selectIsLoaded } =
+//   ingredientsSlice.selectors;
 const selectIngredientsSlice = (state: RootState) => state.ingredients;
 
+// Селекторы для отдельных частей состояния
 export const selectIngredients = createSelector(
   [selectIngredientsSlice],
   (ingredients) => ingredients.ingredients

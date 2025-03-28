@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">48.59% </span>
+                <span class="strong">48.22% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>121/249</span>
+                <span class='fraction'>122/253</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">48.59% </span>
+                <span class="strong">48.22% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>121/249</span>
+                <span class='fraction'>122/253</span>
             </div>
         
             
@@ -312,7 +312,11 @@
 <a name='L247'></a><a href='#L247'>247</a>
 <a name='L248'></a><a href='#L248'>248</a>
 <a name='L249'></a><a href='#L249'>249</a>
-<a name='L250'></a><a href='#L250'>250</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L250'></a><a href='#L250'>250</a>
+<a name='L251'></a><a href='#L251'>251</a>
+<a name='L252'></a><a href='#L252'>252</a>
+<a name='L253'></a><a href='#L253'>253</a>
+<a name='L254'></a><a href='#L254'>254</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -466,6 +470,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -485,6 +490,9 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -573,11 +581,11 @@ export const checkResponse = &lt;T&gt;(res: Response): Promise&lt;T&gt; =&gt; {
 <span class="cstat-no" title="statement not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >  return res.json().then((err) =&gt; Promise.reject(err));</span></span>
 <span class="cstat-no" title="statement not covered" >};</span>
 &nbsp;
-type TServerResponse&lt;T&gt; = {
+export type TServerResponse&lt;T&gt; = {
   success: boolean;
 } &amp; T;
 &nbsp;
-type TRefreshResponse = TServerResponse&lt;{
+export type TRefreshResponse = TServerResponse&lt;{
   refreshToken: string;
   accessToken: string;
 }&gt;;
@@ -628,17 +636,17 @@ export const fetchWithRefresh = <span class="fstat-no" title="function not cover
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" >};</span>
 &nbsp;
-type TIngredientsResponse = TServerResponse&lt;{
+export type TIngredientsResponse = TServerResponse&lt;{
   data: TIngredient[];
 }&gt;;
 &nbsp;
-type TFeedsResponse = TServerResponse&lt;{
+export type TFeedsResponse = TServerResponse&lt;{
   orders: TOrder[];
   total: number;
   totalToday: number;
 }&gt;;
 &nbsp;
-type TOrdersResponse = TServerResponse&lt;{
+export type TOrdersResponse = TServerResponse&lt;{
   data: TOrder[];
 }&gt;;
 &nbsp;
@@ -670,7 +678,7 @@ export const getOrdersApi = <span class="fstat-no" title="function not covered" 
 <span class="cstat-no" title="statement not covered" >    return Promise.reject(data);</span>
 <span class="cstat-no" title="statement not covered" >  });</span>
 &nbsp;
-type TNewOrderResponse = TServerResponse&lt;{
+export type TNewOrderResponse = TServerResponse&lt;{
   order: TOrder;
   name: string;
 }&gt;;
@@ -690,7 +698,7 @@ export const orderBurgerApi = <span class="fstat-no" title="function not covered
 <span class="cstat-no" title="statement not covered" >    return Promise.reject(data);</span>
 <span class="cstat-no" title="statement not covered" >  });</span>
 &nbsp;
-type TOrderResponse = TServerResponse&lt;{
+export type TOrderResponse = TServerResponse&lt;{
   orders: TOrder[];
 }&gt;;
 &nbsp;
@@ -708,10 +716,11 @@ export type TRegisterData = {
   password: string;
 };
 &nbsp;
-type TAuthResponse = TServerResponse&lt;{
+export type TAuthResponse = TServerResponse&lt;{
   refreshToken: string;
   accessToken: string;
   user: TUser;
+  message?: string;
 }&gt;;
 &nbsp;
 export const registerUserApi = <span class="fstat-no" title="function not covered" >(data: TRegisterData) =&gt;</span>
@@ -743,7 +752,10 @@ export const loginUserApi = <span class="fstat-no" title="function not covered" 
 <span class="cstat-no" title="statement not covered" >  })</span>
 <span class="cstat-no" title="statement not covered" >    .then((res) =&gt; checkResponse&lt;TAuthResponse&gt;(res))</span>
 <span class="cstat-no" title="statement not covered" >    .then((data) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      if (data?.success) return data;</span>
+<span class="cstat-no" title="statement not covered" >      if (data?.success) {</span>
+<span class="cstat-no" title="statement not covered" >        localStorage.removeItem('refreshToken');</span>
+<span class="cstat-no" title="statement not covered" >        return data;</span>
+<span class="cstat-no" title="statement not covered" >      }</span>
 <span class="cstat-no" title="statement not covered" >      return Promise.reject(data);</span>
 <span class="cstat-no" title="statement not covered" >    });</span>
 &nbsp;
@@ -775,7 +787,7 @@ export const resetPasswordApi = <span class="fstat-no" title="function not cover
 <span class="cstat-no" title="statement not covered" >      return Promise.reject(data);</span>
 <span class="cstat-no" title="statement not covered" >    });</span>
 &nbsp;
-type TUserResponse = TServerResponse&lt;{ user: TUser }&gt;;
+export type TUserResponse = TServerResponse&lt;{ user: TUser }&gt;;
 &nbsp;
 export const getUserApi = <span class="fstat-no" title="function not covered" >() =&gt;</span>
 <span class="cstat-no" title="statement not covered" >  fetchWithRefresh&lt;TUserResponse&gt;(`${URL}/auth/user`, {</span>
@@ -817,7 +829,7 @@ export const logoutApi = <span class="fstat-no" title="function not covered" >()
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-26T20:56:07.521Z
+                at 2025-03-28T21:02:31.718Z
             </div>
         <script src="../prettify.js"></script>
         <script>

@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import store from '@store';
+import { createMockConstructorIngredient } from '../test-utils';
 import {
   burgerSliceReducer,
   initialState,
@@ -11,7 +12,6 @@ import {
   selectBun,
   selectIngredientConstructor
 } from './burgerSlice';
-import { createMockConstructorIngredient } from './test-utils';
 
 jest.mock('@reduxjs/toolkit', () => ({
   ...jest.requireActual('@reduxjs/toolkit'),

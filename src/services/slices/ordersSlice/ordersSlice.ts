@@ -9,7 +9,7 @@ import { TOrder } from '@utils-types';
 import { API_ERROR } from '../../../utils/constants';
 import { RootState } from '@store';
 
-export type TOrdersSliceState = {
+type TOrdersSliceState = {
   orders: TOrder[];
   order: TOrder | null;
   error: string | null | undefined;
@@ -125,6 +125,36 @@ export const createNewOrder = createAsyncThunk(
 
 export const { clearOrderState } = ordersSlice.actions;
 
+// export const {
+//   selectOrders,
+//   selectOrder,
+//   selectOrdersError,
+//   selectIsOrdersLoaded
+// } = ordersSlice.selectors;
+
+// export const { clearOrderState } = ordersSlice.actions;
+// const selectFeedSlice = (state: RootState) => state.feed;
+
+// export const selectOrders = createSelector(
+//   [selectFeedSlice],
+//   (slice) => slice.orders
+// );
+// export const selectOrder = createSelector(
+//   [selectFeedSlice],
+//   (slice) => slice.order
+// ); //  Помните, что он может быть undefined
+// export const selectOrdersError = createSelector(
+//   [selectFeedSlice],
+//   (slice) => slice.error
+// );
+// export const selectIsOrdersLoaded = createSelector(
+//   [selectFeedSlice],
+//   (slice) => slice.isLoaded
+// );
+// Экспортируем actions
+// export const { clearOrderState } = ordersSlice.actions;
+
+// Определите селекторы вне createSlice
 const selectOrdersSlice = (state: RootState) => state.orders;
 
 export const selectOrders = createSelector(
@@ -134,7 +164,7 @@ export const selectOrders = createSelector(
 export const selectOrder = createSelector(
   [selectOrdersSlice],
   (slice) => slice.order
-);
+); // Помните, что он может быть undefined
 export const selectOrdersError = createSelector(
   [selectOrdersSlice],
   (slice) => slice.error
@@ -144,5 +174,6 @@ export const selectIsOrdersLoaded = createSelector(
   (slice) => slice.isLoaded
 );
 
+// Feed slice selector (предполагая, что feed также есть в RootState)
 const selectFeedSlice = (state: RootState) => state.feed;
 export const ordersSliceReducer = ordersSlice.reducer;

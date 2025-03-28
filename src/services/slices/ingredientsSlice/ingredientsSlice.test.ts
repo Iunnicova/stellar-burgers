@@ -14,8 +14,8 @@ import {
 } from './ingredientsSlice';
 import { TIngredient } from '@utils-types';
 import { API_ERROR } from '../../../utils/constants';
-import { createMockIngredient } from '../burgerSlice/test-utils';
-import { createMockRootState } from '../test-utils';
+
+import { createMockIngredient, createMockRootState } from '../test-utils';
 
 describe('ingredientsSlice', () => {
   let store: ReturnType<typeof configureStore>;

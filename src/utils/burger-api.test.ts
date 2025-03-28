@@ -1,4 +1,4 @@
-import * as burgerApi from './burger-api';
+import * as burgerApi from '../utils/burger-api';
 import * as cookie from '@utils-cookie';
 import { refreshToken, updateUserApi } from '@api';
 
