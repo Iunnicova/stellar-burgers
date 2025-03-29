@@ -25,6 +25,7 @@ export type TOrder = {
   updatedAt: string;
   number: number;
   ingredients: string[];
+  items: string[];
 };
 
 export type TOrdersData = {

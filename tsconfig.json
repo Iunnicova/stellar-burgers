@@ -15,7 +15,7 @@
     "isolatedModules": true,
     "noEmit": false,
     "jsx": "react-jsx",
-    "types": ["node", "jest", "msw"],
+    "types": ["node", "jest"],
     "typeRoots": ["node_modules/@types", "node_modules/@types/fetch-mock"],
     "baseUrl": ".",
 

@@ -10,7 +10,7 @@ const config: JestConfigWithTsJest = {
   moduleNameMapper: {
     '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
     '^.+\\.(css|sass|scss)$': '<rootDir>/__mocks__/styleMock.js',
-   
+
     '^@pages(.*)$': '<rootDir>/src/pages$1',
     '^@components(.*)$': '<rootDir>/src/components$1',
     '^@ui(.*)$': '<rootDir>/src/components/ui$1',
@@ -20,7 +20,9 @@ const config: JestConfigWithTsJest = {
     '^@api(.*)$': '<rootDir>/src/utils/burger-api.ts',
     '^@slices(.*)$': '<rootDir>/src/services/slices$1',
     '^@selectors(.*)$': '<rootDir>/src/services/selectors$1',
-    '^@store(.*)$': '<rootDir>/src/services/store$1'
+    '^@store(.*)$': '<rootDir>/src/services/store$1',
+
+    '^@/src/(.*)$': '<rootDir>/src/$1'
   },
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest'

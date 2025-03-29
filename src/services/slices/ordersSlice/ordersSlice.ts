@@ -4,19 +4,29 @@ import {
   createSlice
 } from '@reduxjs/toolkit';
 
-import { getOrdersApi, getOrderByNumberApi, orderBurgerApi } from '@api';
+import {
+  getOrdersApi,
+  getOrderByNumberApi,
+  orderBurgerApi,
+  TOrderResponse,
+  TNewOrderResponse
+} from '@api';
 import { TOrder } from '@utils-types';
 import { API_ERROR } from '../../../utils/constants';
 import { RootState } from '@store';
 
-type TOrdersSliceState = {
+export interface RejectedValue {
+  message: string;
+}
+
+export type TOrdersSliceState = {
   orders: TOrder[];
   order: TOrder | null;
   error: string | null | undefined;
   isLoaded: boolean;
 };
 
-const initialState: TOrdersSliceState = {
+export const initialState: TOrdersSliceState = {
   orders: [],
   order: null,
   error: null,
@@ -31,12 +41,7 @@ export const ordersSlice = createSlice({
       state.order = null;
     }
   },
-  // selectors: {
-  //   selectOrders: (state) => state.orders,
-  //   selectOrder: (state) => state.order,
-  //   selectOrdersError: (state) => state.error,
-  //   selectIsOrdersLoaded: (state) => state.isLoaded
-  // },
+
   extraReducers(builder) {
     builder
 
@@ -62,7 +67,10 @@ export const ordersSlice = createSlice({
         state.isLoaded = false;
       })
       .addCase(getOrder.rejected, (state, action) => {
-        state.error = action.error.message || API_ERROR;
+        state.error =
+          typeof action.payload === 'string'
+            ? action.payload
+            : (action.error.message ?? API_ERROR);
         state.isLoaded = false;
       })
 
@@ -75,8 +83,8 @@ export const ordersSlice = createSlice({
         state.isLoaded = false;
       })
       .addCase(createNewOrder.rejected, (state, action) => {
-        state.error = action.error.message || API_ERROR;
         state.isLoaded = false;
+        state.error = action.payload || 'Ошибка создания заказа';
       });
   }
 });
@@ -101,60 +109,49 @@ export const getUserOrders = createAsyncThunk(
   }
 );
 
-export const getOrder = createAsyncThunk(
-  'orders/getOrder',
-  async (number: number, { rejectWithValue }) => {
+export const getOrder = createAsyncThunk<
+  TOrderResponse,
+  number,
+  { rejectValue: string }
+>('orders/getOrder', async (number, { rejectWithValue }) => {
+  try {
     const response = await getOrderByNumberApi(number);
-    if (!response.success) {
-      return rejectWithValue(response);
-    }
-    return response;
-  }
-);
 
-export const createNewOrder = createAsyncThunk(
-  'orders/createNewOrder',
-  async (ingredients: string[], { rejectWithValue }) => {
-    const response = await orderBurgerApi(ingredients);
-    if (!response.success) {
-      return rejectWithValue(response);
+    if (
+      !response ||
+      typeof response !== 'object' ||
+      !('success' in response) ||
+      !response.success
+    ) {
+      return rejectWithValue('Ошибка сервера');
     }
+
     return response;
+  } catch (error: any) {
+    return rejectWithValue(error.message || 'Произошла неизвестная ошибка');
   }
-);
+});
+
+export const createNewOrder = createAsyncThunk<
+  TNewOrderResponse,
+  string[],
+  { rejectValue: string }
+>('orders/createNewOrder', async (ingredients, { rejectWithValue }) => {
+  try {
+    const response = await orderBurgerApi(ingredients);
+
+    if (!response.success) {
+      return rejectWithValue('Ошибка создания заказа');
+    }
+
+    return response;
+  } catch (error: any) {
+    return rejectWithValue(error.message || 'Произошла неизвестная ошибка');
+  }
+});
 
 export const { clearOrderState } = ordersSlice.actions;
 
-// export const {
-//   selectOrders,
-//   selectOrder,
-//   selectOrdersError,
-//   selectIsOrdersLoaded
-// } = ordersSlice.selectors;
-
-// export const { clearOrderState } = ordersSlice.actions;
-// const selectFeedSlice = (state: RootState) => state.feed;
-
-// export const selectOrders = createSelector(
-//   [selectFeedSlice],
-//   (slice) => slice.orders
-// );
-// export const selectOrder = createSelector(
-//   [selectFeedSlice],
-//   (slice) => slice.order
-// ); //  Помните, что он может быть undefined
-// export const selectOrdersError = createSelector(
-//   [selectFeedSlice],
-//   (slice) => slice.error
-// );
-// export const selectIsOrdersLoaded = createSelector(
-//   [selectFeedSlice],
-//   (slice) => slice.isLoaded
-// );
-// Экспортируем actions
-// export const { clearOrderState } = ordersSlice.actions;
-
-// Определите селекторы вне createSlice
 const selectOrdersSlice = (state: RootState) => state.orders;
 
 export const selectOrders = createSelector(
@@ -164,7 +161,7 @@ export const selectOrders = createSelector(
 export const selectOrder = createSelector(
   [selectOrdersSlice],
   (slice) => slice.order
-); // Помните, что он может быть undefined
+);
 export const selectOrdersError = createSelector(
   [selectOrdersSlice],
   (slice) => slice.error
@@ -174,6 +171,5 @@ export const selectIsOrdersLoaded = createSelector(
   (slice) => slice.isLoaded
 );
 
-// Feed slice selector (предполагая, что feed также есть в RootState)
 const selectFeedSlice = (state: RootState) => state.feed;
 export const ordersSliceReducer = ordersSlice.reducer;
