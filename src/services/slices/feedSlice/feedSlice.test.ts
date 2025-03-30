@@ -7,14 +7,21 @@ import {
   selectFeedError,
   selectIsFeedLoaded,
   selectTotalOrders,
-  selectTotalOrdersToday
+  selectTotalOrdersToday,
+  TFeedSliceState
 } from './feedSlice';
 import { getFeedsApi } from '@api';
-import { TOrder } from '@utils-types';
+import thunk from 'redux-thunk';
+import * as api from '@api';
 
 jest.mock('@api', () => ({
   getFeedsApi: jest.fn()
 }));
+
+jest.mock('@/src/utils/burger-api');
+const mockedGetFeedsApi = api.getFeedsApi as jest.MockedFunction<
+  typeof api.getFeedsApi
+>;
 
 describe('feedSlice', () => {
   let store: any;
@@ -27,73 +34,44 @@ describe('feedSlice', () => {
     });
   });
 
-  test('should have correct initial state', () => {
+  test('должно иметь правильное начальное состояние', () => {
     const state = store.getState().feed;
     expect(state).toEqual(initialState);
   });
 
-  test('should handle getAllOrdersData.pending', async () => {
-    const initialStateBeforeDispatch = store.getState().feed;
-
-    const dispatchResult = store.dispatch(getAllOrdersData());
-
-    await dispatchResult;
-
-    const state = store.getState().feed;
-
-    expect(initialStateBeforeDispatch.error).toBe(null);
-    expect(state.isFeedLoaded).toBe(false);
-  });
-
-  // test('should handle getAllOrdersData.fulfilled', async () => {
-  //   const mockOrders: TOrder[] = [
-  //     {
-  //       _id: '1',
-  //       ingredients: [],
-  //       name: 'Order 1',
-  //       status: 'done',
-  //       createdAt: '',
-  //       updatedAt: '',
-  //       number: 123
-  //     },
-  //     {
-  //       _id: '2',
-  //       ingredients: [],
-  //       name: 'Order 2',
-  //       status: 'pending',
-  //       createdAt: '',
-  //       updatedAt: '',
-  //       number: 456
-  //     }
-  //   ];
-  //   const mockTotal = 100;
-  //   const mockTotalToday = 10;
-
-  //   (getFeedsApi as jest.Mock).mockResolvedValue({
-  //     success: true,
-  //     orders: mockOrders,
-  //     total: mockTotal,
-  //     totalToday: mockTotalToday
-  //   });
-
-  //   await store.dispatch(getAllOrdersData());
-
-  //   const state = store.getState().feed;
-  //   expect(state.orders).toEqual(mockOrders);
-  //   expect(state.totalOrders).toBe(mockTotal);
-  //   expect(state.totalOrdersToday).toBe(mockTotalToday);
-  //   expect(state.isFeedLoaded).toBe(true);
-  //   expect(state.error).toBeNull();
-  // });
-
-  test('should handle getAllOrdersData.rejected', async () => {
-    const mockError = { success: false, message: 'API Error' };
-    (getFeedsApi as jest.Mock).mockRejectedValue(mockError);
+  test('следует установить значение ошибки в action.error.message, когда getAllOrdersData отклоняется', async () => {
+    const errorMessage = 'Failed to fetch orders';
+    const mockErrorResponse = {
+      success: false,
+      orders: [],
+      total: 0,
+      totalToday: 0,
+      message: errorMessage
+    };
+    mockedGetFeedsApi.mockRejectedValue(mockErrorResponse);
 
     await store.dispatch(getAllOrdersData());
 
-    const state = store.getState().feed;
-    expect(state.error).toBe('API Error');
+    const state = store.getState().feed as TFeedSliceState;
+
+    expect(state.error).toBe(errorMessage);
+    expect(state.isFeedLoaded).toBe(false);
+  });
+
+  test('следует установить значение ошибки "Неизвестная ошибка", когда getAllOrdersData отклоняется, а action.error.message отсутствует', async () => {
+    const mockErrorResponse = {
+      success: false,
+      orders: [],
+      total: 0,
+      totalToday: 0
+    };
+    mockedGetFeedsApi.mockRejectedValue(mockErrorResponse);
+
+    await store.dispatch(getAllOrdersData());
+
+    const state = store.getState().feed as TFeedSliceState;
+
+    expect(state.error).toBe('Unknown error');
     expect(state.isFeedLoaded).toBe(false);
   });
 
@@ -115,5 +93,75 @@ describe('feedSlice', () => {
   test('should select isFeedLoaded correctly', () => {
     const mockState = { feed: { ...initialState, isFeedLoaded: true } };
     expect(selectIsFeedLoaded(mockState as any)).toBe(true);
+  });
+
+  test('dispatches fulfilled action with data when API call succeeds', async () => {
+    const mockResponse = {
+      success: true,
+      orders: [
+        { _id: '1', status: 'done', name: 'Burger', createdAt: '2024-03-30' }
+      ],
+      total: 100,
+      totalToday: 10
+    };
+
+    (getFeedsApi as jest.Mock).mockResolvedValue(mockResponse);
+
+    await store.dispatch(getAllOrdersData() as any);
+
+    const state: TFeedSliceState = store.getState().feed;
+
+    expect(state.orders).toEqual(mockResponse.orders);
+    expect(state.totalOrders).toBe(mockResponse.total);
+    expect(state.totalOrdersToday).toBe(mockResponse.totalToday);
+    expect(state.isFeedLoaded).toBe(true);
+    expect(state.error).toBeNull();
+  });
+
+  test('должен обработать отклоненный запрос и установить ошибку', async () => {
+    const mockError = { success: false, message: 'API Error' };
+
+    (getFeedsApi as jest.Mock).mockResolvedValue(mockError);
+
+    const store = configureStore({
+      reducer: { feed: feedSliceReducer },
+      middleware: [thunk]
+    });
+
+    await store.dispatch(getAllOrdersData() as any);
+    const state = store.getState().feed;
+
+    expect(state.isFeedLoaded).toBe(false);
+    expect(state.error).toBe('API Error');
+  });
+
+  test('должен вернуть список заказов из стейта', () => {
+    const mockOrders = [
+      {
+        _id: '1',
+        status: 'done',
+        name: 'Burger 1',
+        createdAt: '2025-03-30T12:00:00Z'
+      },
+      {
+        _id: '2',
+        status: 'pending',
+        name: 'Burger 2',
+        createdAt: '2025-03-30T12:05:00Z'
+      }
+    ];
+
+    const mockState = {
+      feed: {
+        orders: mockOrders,
+        totalOrders: 100,
+        totalOrdersToday: 10,
+        error: null,
+        isFeedLoaded: true
+      } as TFeedSliceState
+    };
+
+    const result = selectAllOrders(mockState);
+    expect(result).toEqual(mockOrders);
   });
 });

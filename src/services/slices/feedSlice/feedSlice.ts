@@ -40,7 +40,12 @@ export const feedSlice = createSlice({
       })
 
       .addCase(getAllOrdersData.rejected, (state, action) => {
-        state.error = action.error.message;
+        state.error =
+          action.payload &&
+          typeof action.payload === 'object' &&
+          'message' in action.payload
+            ? (action.payload as { message: string }).message
+            : action.error.message || 'Unknown error';
         state.isFeedLoaded = false;
       });
   }
