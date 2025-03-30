@@ -156,7 +156,7 @@ export const loginUser = createAsyncThunk(
       const response = await loginUserApi(dataUser);
 
       if (!response.success) {
-        return rejectWithValue({ message: response.message || 'Login failed' });
+        return rejectWithValue(response);
       }
 
       setCookie('accessToken', response.accessToken);

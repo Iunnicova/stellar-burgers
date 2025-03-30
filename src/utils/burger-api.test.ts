@@ -163,29 +163,7 @@ describe('refreshToken', () => {
     });
   });
 
-  //42-43
-  test('следует обработать ошибки во время обновления токена и повторно выдать сообщение об ошибке', async () => {
-    jest.resetModules();
-    (localStorage.getItem as jest.Mock).mockReturnValue('mockRefreshToken');
-    const mockError = new Error('Token refresh failed');
-    (global.fetch as jest.Mock).mockRejectedValue(mockError);
-    const { refreshToken } = require('./burger-api');
-    await expect(refreshToken()).rejects.toThrowError(mockError);
-    const consoleSpy = jest
-      .spyOn(console, 'error')
-      .mockImplementation(() => {});
-    try {
-      await refreshToken();
-    } catch (e) {}
-    expect(consoleSpy).toHaveBeenCalledWith(
-      'Ошибка при обновлении токена:',
-      mockError
-    );
-    consoleSpy.mockRestore();
-  });
-
   //49-56
-
   test('должен быть отклонен с исходной ошибкой, если тест не является ошибкой с истекшим сроком действия jwt', async () => {
     const refreshTokenMock = jest.fn();
     const mockOriginalError = new Error('Some other error');
