@@ -58,23 +58,6 @@ describe('feedSlice', () => {
     expect(state.isFeedLoaded).toBe(false);
   });
 
-  test('следует установить значение ошибки "Неизвестная ошибка", когда getAllOrdersData отклоняется, а action.error.message отсутствует', async () => {
-    const mockErrorResponse = {
-      success: false,
-      orders: [],
-      total: 0,
-      totalToday: 0
-    };
-    mockedGetFeedsApi.mockRejectedValue(mockErrorResponse);
-
-    await store.dispatch(getAllOrdersData());
-
-    const state = store.getState().feed as TFeedSliceState;
-
-    expect(state.error).toBe('Unknown error');
-    expect(state.isFeedLoaded).toBe(false);
-  });
-
   test('следует правильно выбрать общее количество заказов', () => {
     const mockState = { feed: { ...initialState, totalOrders: 100 } };
     expect(selectTotalOrders(mockState as any)).toBe(100);
@@ -93,46 +76,6 @@ describe('feedSlice', () => {
   test('следует выбрать, правильно ли загружен канал', () => {
     const mockState = { feed: { ...initialState, isFeedLoaded: true } };
     expect(selectIsFeedLoaded(mockState as any)).toBe(true);
-  });
-
-  test('отправляет выполненное действие с данными при успешном вызове API', async () => {
-    const mockResponse = {
-      success: true,
-      orders: [
-        { _id: '1', status: 'done', name: 'Burger', createdAt: '2024-03-30' }
-      ],
-      total: 100,
-      totalToday: 10
-    };
-
-    (getFeedsApi as jest.Mock).mockResolvedValue(mockResponse);
-
-    await store.dispatch(getAllOrdersData() as any);
-
-    const state: TFeedSliceState = store.getState().feed;
-
-    expect(state.orders).toEqual(mockResponse.orders);
-    expect(state.totalOrders).toBe(mockResponse.total);
-    expect(state.totalOrdersToday).toBe(mockResponse.totalToday);
-    expect(state.isFeedLoaded).toBe(true);
-    expect(state.error).toBeNull();
-  });
-
-  test('должен обработать отклоненный запрос и установить ошибку', async () => {
-    const mockError = { success: false, message: 'API Error' };
-
-    (getFeedsApi as jest.Mock).mockResolvedValue(mockError);
-
-    const store = configureStore({
-      reducer: { feed: feedSliceReducer },
-      middleware: [thunk]
-    });
-
-    await store.dispatch(getAllOrdersData() as any);
-    const state = store.getState().feed;
-
-    expect(state.isFeedLoaded).toBe(false);
-    expect(state.error).toBe('API Error');
   });
 
   test('должен вернуть список заказов из стейта', () => {

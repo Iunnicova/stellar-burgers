@@ -29,23 +29,16 @@ export const feedSlice = createSlice({
     builder
       .addCase(getAllOrdersData.pending, (state) => {
         state.error = null;
-        state.isFeedLoaded = false;
+        state.isFeedLoaded = true;
       })
       .addCase(getAllOrdersData.fulfilled, (state, action) => {
         state.orders = action.payload.orders;
         state.totalOrders = action.payload.total;
         state.totalOrdersToday = action.payload.totalToday;
-        state.isFeedLoaded = true;
-        state.error = null;
+        state.isFeedLoaded = false;
       })
-
       .addCase(getAllOrdersData.rejected, (state, action) => {
-        state.error =
-          action.payload &&
-          typeof action.payload === 'object' &&
-          'message' in action.payload
-            ? (action.payload as { message: string }).message
-            : action.error.message || 'Unknown error';
+        state.error = action.error.message || API_ERROR;
         state.isFeedLoaded = false;
       });
   }

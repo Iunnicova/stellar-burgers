@@ -17,7 +17,8 @@ import * as api from '@api';
 import { TOrder } from '@/src/utils/types';
 import { API_ERROR } from '@/src/utils/constants';
 import { getOrderByNumberApi, getOrdersApi, orderBurgerApi } from '@api';
-import { RootState } from '../../store';
+// import { RootState } from '../../store';
+import { RootState } from '@store';
 
 const initialState: { order: TOrder | null; isLoaded: boolean } = {
   order: null,
@@ -335,8 +336,22 @@ describe('ordersSlice', () => {
     expect(state.error).toBe(API_ERROR);
     expect(state.isLoaded).toBe(false);
   });
+
+  test('должно быть установлено значение error в API_ERROR и загружено в значение false, если сообщение об ошибке не отображается', async () => {
+    const action = {
+      type: getUserOrders.rejected.type,
+      error: {}
+    };
+
+    store.dispatch(action);
+
+    const state = store.getState().orders;
+
+    expect(state.error).toBe(API_ERROR);
+    expect(state.isLoaded).toBe(false);
+  });
 });
-//****************** */
+
 describe('Orders Selectors', () => {
   test('выберите заказы должен возвращать список заказов', () => {
     expect(selectOrders(mockState)).toEqual(mockState.orders.orders);

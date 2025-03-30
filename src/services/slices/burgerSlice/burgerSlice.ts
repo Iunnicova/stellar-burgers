@@ -43,32 +43,7 @@ export const burgerSlice = createSlice({
     },
 
     clearBurgerConstructor: () => initialState,
-    // moveIngredientUp: (
-    //   state,
-    //   { payload }: PayloadAction<TConstructorIngredient>
-    // ) => {
-    //   const ingredientIndex = state.ingredients.findIndex(
-    //     (ingredient) => ingredient.id === payload.id
-    //   );
-    //   if (ingredientIndex > 0) {
-    //     state.ingredients[ingredientIndex] =
-    //       state.ingredients[ingredientIndex - 1];
-    //     state.ingredients[ingredientIndex - 1] = payload;
-    //   }
-    // },
-    // moveIngredientDown: (
-    //   state,
-    //   { payload }: PayloadAction<TConstructorIngredient>
-    // ) => {
-    //   const ingredientIndex = state.ingredients.findIndex(
-    //     (ingredient) => ingredient.id === payload.id
-    //   );
-    //   if (ingredientIndex < state.ingredients.length - 1) {
-    //     state.ingredients[ingredientIndex] =
-    //       state.ingredients[ingredientIndex + 1];
-    //     state.ingredients[ingredientIndex + 1] = payload;
-    //   }
-    // }
+
     moveIngredientUp: (state, action: PayloadAction<number>) => {
       const dragIndex = action.payload;
       if (dragIndex <= 0) {
@@ -90,10 +65,6 @@ export const burgerSlice = createSlice({
       state.ingredients.splice(hoverIndex, 0, dragIngredient);
     }
   }
-  // selectors: {
-  //   selectBun: (state) => state.bun,
-  //   selectIngredientConstructor: (state) => state.ingredients
-  // }
 });
 
 export const {

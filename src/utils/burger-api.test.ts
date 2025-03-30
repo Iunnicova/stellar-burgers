@@ -1,7 +1,15 @@
 import * as burgerApi from '../utils/burger-api';
 import * as cookie from '@utils-cookie';
-import { checkResponse, getFeedsApi, updateUserApi } from '@api';
-import { setCookie } from '@utils-cookie';
+import {
+  checkResponse,
+  fetchWithRefresh,
+  getFeedsApi,
+  getOrdersApi,
+  logoutApi,
+  orderBurgerApi,
+  updateUserApi
+} from '@api';
+import { getCookie, setCookie } from '@utils-cookie';
 
 import { getIngredientsApi } from './burger-api';
 import { URL } from './burger-api';
@@ -134,31 +142,6 @@ describe('refreshToken', () => {
     expect(result).toEqual(mockData);
   });
 
-  // test('should handle JSON parsing errors during error handling', async () => {
-  //   const mockResponse = {
-  //     ok: false,
-  //     json: jest.fn().mockRejectedValue(new Error('JSON parsing failed'))
-  //   } as unknown as Response;
-
-  //   await expect(checkResponse<any>(mockResponse)).rejects.toThrowError(
-  //     'JSON parsing failed'
-  //   );
-  //   expect(mockResponse.json).toHaveBeenCalled();
-  // });
-
-  // test('should handle JSON parsing errors during success handling', async () => {
-  //   const mockResponse = {
-  //     ok: true,
-  //     json: jest.fn().mockRejectedValue(new Error('JSON parsing failed'))
-  //   } as unknown as Response;
-
-  //   await expect(checkResponse<any>(mockResponse)).rejects.toThrowError(
-  //     'JSON parsing failed'
-  //   );
-  //   expect(mockResponse.json).toHaveBeenCalled();
-  // });
-  //   //******* */
-
   //25-46
   test('должен быть успешно обновлен токен и обновлены файлы cookie и localStorage', async () => {
     jest.resetModules();
@@ -180,6 +163,7 @@ describe('refreshToken', () => {
     });
   });
 
+  //42-43
   test('следует обработать ошибки во время обновления токена и повторно выдать сообщение об ошибке', async () => {
     jest.resetModules();
     (localStorage.getItem as jest.Mock).mockReturnValue('mockRefreshToken');
@@ -200,31 +184,7 @@ describe('refreshToken', () => {
     consoleSpy.mockRestore();
   });
 
-  // test('should handle errors when checkResponse fails', async () => {
-  //   jest.resetModules();
-  //   (localStorage.getItem as jest.Mock).mockReturnValue('mockRefreshToken');
-  //   const mockError = new Error('checkResponse failed');
-  //   (global.fetch as jest.Mock).mockResolvedValue({
-  //     ok: false,
-  //     json: jest.fn().mockRejectedValue(mockError)
-  //   } as unknown as Response);
-  //   const { refreshToken } = require('./burger-api');
-  //   await expect(refreshToken()).rejects.toThrowError(mockError);
-  //   const consoleSpy = jest
-  //     .spyOn(console, 'error')
-  //     .mockImplementation(() => {});
-  //   try {
-  //     await refreshToken();
-  //   } catch (e) {}
-  //   expect(consoleSpy).toHaveBeenCalledWith(
-  //     'Ошибка при обновлении токена:',
-  //     mockError
-  //   );
-  //   consoleSpy.mockRestore();
-  // });
-  //********** */
-
-  //49-57
+  //49-56
 
   test('должен быть отклонен с исходной ошибкой, если тест не является ошибкой с истекшим сроком действия jwt', async () => {
     const refreshTokenMock = jest.fn();
@@ -266,31 +226,6 @@ describe('refreshToken', () => {
     expect(refreshTokenMock).toHaveBeenCalled();
   });
 
-  //************* */
-
-  //85-87
-  // test('should handle errors when fetch fails', async () => {
-  //   const mockError = new Error('Failed to fetch');
-  //   (global.fetch as jest.Mock).mockRejectedValue(mockError);
-
-  //   await expect(getIngredientsApi()).rejects.toThrowError(mockError);
-  // });
-
-  //88
-  // test("должен возвращать данные при успешном ответе API", async () => {
-  //   const mockResponse = { success: true, data: [{ id: "1", name: "Bun" }] };
-
-  //   global.fetch = jest.fn(() =>
-  //     Promise.resolve({
-  //       ok: true,
-  //       json: () => Promise.resolve(mockResponse),
-  //     })
-  //   ) as jest.Mock;
-
-  //   const result = await getIngredientsApi();
-  //   expect(result).toEqual(mockResponse.data);
-  // });
-
   //85-90
   test('должен отклонять промис, если API вернул success: false', async () => {
     const mockResponse = { success: false, message: 'Ошибка запроса' };
@@ -304,8 +239,6 @@ describe('refreshToken', () => {
 
     await expect(getIngredientsApi()).rejects.toEqual(mockResponse);
   });
-
-  //*************** */
 
   //93-98
   test('должен отклонять промис, если API вернул success: false', async () => {
@@ -321,5 +254,37 @@ describe('refreshToken', () => {
     await expect(getFeedsApi()).rejects.toEqual(mockResponse);
   });
 
-  //*
+  //245-253
+  test('следует вызвать выборку с правильными параметрами', async () => {
+    const mockToken = 'mockRefreshToken';
+    Object.defineProperty(window, 'localStorage', {
+      value: {
+        getItem: jest.fn(() => mockToken)
+      },
+      writable: true
+    });
+
+    const mockResponse = {
+      success: true
+    };
+    (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockResponse
+    });
+    const result = await logoutApi();
+
+    expect(fetch).toHaveBeenCalledWith(
+      `${URL}/auth/logout`,
+      expect.objectContaining({
+        method: 'POST',
+        headers: expect.objectContaining({
+          'Content-Type': 'application/json;charset=utf-8'
+        }),
+        body: JSON.stringify({
+          token: mockToken
+        })
+      })
+    );
+    expect(result).toEqual(mockResponse);
+  });
 });

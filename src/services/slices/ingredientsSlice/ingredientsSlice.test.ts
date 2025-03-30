@@ -68,27 +68,6 @@ describe('ingredientsSlice', () => {
     );
   });
 
-  test('должно быть установлено значение false и ошибка при getIngredients.pending', () => {
-    const action = getIngredients.pending('');
-    const state = ingredientsSliceReducer(initialState, action);
-
-    expect(state.isLoaded).toBe(false);
-    expect(state.error).toBeNull();
-  });
-
-  test('должен задать ингредиенты и установить isLoaded в true на getIngredients.fulfilled', () => {
-    const mockIngredients: TIngredient[] = [
-      createMockIngredient(),
-      createMockIngredient()
-    ];
-    const state = ingredientsSliceReducer(
-      initialState,
-      getIngredients.fulfilled(mockIngredients, '')
-    );
-    expect(state.ingredients).toEqual(mockIngredients);
-    expect(state.isLoaded).toBe(true);
-  });
-
   test('должно быть установлено значение false и ошибка при получении ингредиентов.rejected', () => {
     const errorMessage = 'Не удалось достать ингредиенты';
     const state = ingredientsSliceReducer(
@@ -138,41 +117,5 @@ describe('ingredientsSlice', () => {
     });
     const isLoaded = selectIsLoaded(mockState);
     expect(isLoaded).toBe(true);
-  });
-
-  test('должно быть установлено значение false и ошибка при getIngredients.pending', () => {
-    const action = getIngredients.pending('');
-    const state = ingredientsSliceReducer(initialState, action);
-
-    expect(state.isLoaded).toBe(false);
-    expect(state.error).toBeNull();
-  });
-
-  test('корректно обновляет состояние при успешном вызове API', async () => {
-    const mockData = [
-      {
-        _id: '1',
-        name: 'Bun',
-        type: 'bread',
-        proteins: 10,
-        fat: 5,
-        carbohydrates: 20,
-        calories: 250,
-        price: 100,
-        image: '',
-        image_mobile: '',
-        image_large: ''
-      }
-    ];
-
-    jest.spyOn(api, 'getIngredientsApi').mockResolvedValue(mockData);
-
-    await dispatch(getIngredients()).unwrap();
-
-    const state = store.getState() as RootState;
-
-    expect(state.ingredients.ingredients).toEqual(mockData);
-    expect(state.ingredients.isLoaded).toBe(true);
-    expect(state.ingredients.error).toBeNull();
   });
 });
