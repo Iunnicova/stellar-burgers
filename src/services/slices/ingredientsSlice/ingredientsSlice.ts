@@ -30,14 +30,15 @@ export const ingredientsSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(getIngredients.pending, (state) => {
-        state.isLoaded = true;
+        state.isLoaded = false;
         state.error = null;
       })
       .addCase(
         getIngredients.fulfilled,
         (state, action: PayloadAction<TIngredient[]>) => {
           state.ingredients = action.payload;
-          state.isLoaded = false;
+
+          state.isLoaded = true;
         }
       )
       .addCase(getIngredients.rejected, (state, action) => {

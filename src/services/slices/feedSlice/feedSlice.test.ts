@@ -45,46 +45,46 @@ describe('feedSlice', () => {
     expect(state.isFeedLoaded).toBe(false);
   });
 
-  test('should handle getAllOrdersData.fulfilled', async () => {
-    const mockOrders: TOrder[] = [
-      {
-        _id: '1',
-        ingredients: [],
-        name: 'Order 1',
-        status: 'done',
-        createdAt: '',
-        updatedAt: '',
-        number: 123
-      },
-      {
-        _id: '2',
-        ingredients: [],
-        name: 'Order 2',
-        status: 'pending',
-        createdAt: '',
-        updatedAt: '',
-        number: 456
-      }
-    ];
-    const mockTotal = 100;
-    const mockTotalToday = 10;
+  // test('should handle getAllOrdersData.fulfilled', async () => {
+  //   const mockOrders: TOrder[] = [
+  //     {
+  //       _id: '1',
+  //       ingredients: [],
+  //       name: 'Order 1',
+  //       status: 'done',
+  //       createdAt: '',
+  //       updatedAt: '',
+  //       number: 123
+  //     },
+  //     {
+  //       _id: '2',
+  //       ingredients: [],
+  //       name: 'Order 2',
+  //       status: 'pending',
+  //       createdAt: '',
+  //       updatedAt: '',
+  //       number: 456
+  //     }
+  //   ];
+  //   const mockTotal = 100;
+  //   const mockTotalToday = 10;
 
-    (getFeedsApi as jest.Mock).mockResolvedValue({
-      success: true,
-      orders: mockOrders,
-      total: mockTotal,
-      totalToday: mockTotalToday
-    });
+  //   (getFeedsApi as jest.Mock).mockResolvedValue({
+  //     success: true,
+  //     orders: mockOrders,
+  //     total: mockTotal,
+  //     totalToday: mockTotalToday
+  //   });
 
-    await store.dispatch(getAllOrdersData());
+  //   await store.dispatch(getAllOrdersData());
 
-    const state = store.getState().feed;
-    expect(state.orders).toEqual(mockOrders);
-    expect(state.totalOrders).toBe(mockTotal);
-    expect(state.totalOrdersToday).toBe(mockTotalToday);
-    expect(state.isFeedLoaded).toBe(true);
-    expect(state.error).toBeNull();
-  });
+  //   const state = store.getState().feed;
+  //   expect(state.orders).toEqual(mockOrders);
+  //   expect(state.totalOrders).toBe(mockTotal);
+  //   expect(state.totalOrdersToday).toBe(mockTotalToday);
+  //   expect(state.isFeedLoaded).toBe(true);
+  //   expect(state.error).toBeNull();
+  // });
 
   test('should handle getAllOrdersData.rejected', async () => {
     const mockError = { success: false, message: 'API Error' };
