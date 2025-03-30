@@ -58,7 +58,7 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
         {({ isActive }) => (
           <>
             <ProfileIcon type={isActive ? 'primary' : 'secondary'} />
-            <p className='text text_type_main-default ml-2'>
+            <p data-cy='user-name' className='text text_type_main-default ml-2'>
               {userName || 'Личный кабинет'}
             </p>
           </>

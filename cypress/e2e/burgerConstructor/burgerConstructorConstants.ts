@@ -1,0 +1,14 @@
+export const localUrl = 'http://localhost:4000';
+export const apiUrlIngredients = 'api/ingredients';
+export const user = '[data-cy=user-name]';
+export const selectedIngredients = '[data-cy=selected-ingredients]';
+export const topBun = '[data-cy = top-bun]';
+export const bottomBun = '[data-cy = bottom-bun]';
+export const toppings = '[data-cy=toppings]';
+export const sauces = '[data-cy=sauces]';
+export const buns = '[data-cy=buns]';
+export const modal = '[data-cy=modal]';
+export const modalOverlay = '[data-cy=modal-overlay]';
+export const closeModalButton = '[data-cy=modal-close-button]';
+export const orderButton = '[data-cy=order-button]';
+export const orderNumber = '[data-cy=order-number]';
