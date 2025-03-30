@@ -54,7 +54,6 @@ export const userSlice = createSlice({
         state.user = action.payload.user;
         state.isDataLoaded = false;
       })
-
       .addCase(registerUser.rejected, (state, action) => {
         state.error = (action.payload as string) || null;
         state.isAuthenticated = false;
@@ -71,10 +70,9 @@ export const userSlice = createSlice({
         state.user = action.payload.user;
         state.isDataLoaded = false;
       })
-
       .addCase(loginUser.rejected, (state, action) => {
         const payload = action.payload as { message?: string } | undefined;
-        state.error = payload?.message || 'Login failed';
+        state.error = payload?.message || 'Произошла неизвестная ошибка';
       })
       // Получение данных пользователя
       .addCase(getDataUser.pending, (state) => {

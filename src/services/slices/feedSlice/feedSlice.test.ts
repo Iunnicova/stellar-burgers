@@ -75,27 +75,27 @@ describe('feedSlice', () => {
     expect(state.isFeedLoaded).toBe(false);
   });
 
-  test('should select total orders correctly', () => {
+  test('следует правильно выбрать общее количество заказов', () => {
     const mockState = { feed: { ...initialState, totalOrders: 100 } };
     expect(selectTotalOrders(mockState as any)).toBe(100);
   });
 
-  test('should select total orders today correctly', () => {
+  test('следует ли правильно выбрать общее количество заказов на сегодняшний день', () => {
     const mockState = { feed: { ...initialState, totalOrdersToday: 10 } };
     expect(selectTotalOrdersToday(mockState as any)).toBe(10);
   });
 
-  test('should select feed error correctly', () => {
+  test('следует ли правильно выбрать ошибку подачи', () => {
     const mockState = { feed: { ...initialState, error: 'Test Error' } };
     expect(selectFeedError(mockState as any)).toBe('Test Error');
   });
 
-  test('should select isFeedLoaded correctly', () => {
+  test('следует выбрать, правильно ли загружен канал', () => {
     const mockState = { feed: { ...initialState, isFeedLoaded: true } };
     expect(selectIsFeedLoaded(mockState as any)).toBe(true);
   });
 
-  test('dispatches fulfilled action with data when API call succeeds', async () => {
+  test('отправляет выполненное действие с данными при успешном вызове API', async () => {
     const mockResponse = {
       success: true,
       orders: [
