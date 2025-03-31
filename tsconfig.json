@@ -16,8 +16,11 @@
     "noEmit": false,
     "jsx": "react-jsx",
     "types": ["node", "jest"],
+    "typeRoots": ["node_modules/@types", "node_modules/@types/fetch-mock"],
     "baseUrl": ".",
+
     "paths": {
+      "@/*": ["./*"],
       "@pages": ["src/pages"],
       "@components": ["src/components"],
       "@ui": ["src/components/ui"],
@@ -30,5 +33,5 @@
       "@store": ["src/services/store"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "__tests__/userSlice.test.ts"]
 }

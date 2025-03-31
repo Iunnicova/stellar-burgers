@@ -1,10 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-
+import React from 'react';
+import { render } from '@testing-library/react';
 import { getFeedsApi } from '@api';
 import { TOrder } from '@utils-types';
 import { API_ERROR } from '../../../utils/constants';
 
-type TFeedSliceState = {
+export type TFeedSliceState = {
   orders: TOrder[];
   totalOrders: number;
   totalOrdersToday: number;
@@ -12,7 +13,7 @@ type TFeedSliceState = {
   isFeedLoaded: boolean;
 };
 
-const initialState: TFeedSliceState = {
+export const initialState: TFeedSliceState = {
   orders: [],
   totalOrders: 0,
   totalOrdersToday: 0,
@@ -24,13 +25,6 @@ export const feedSlice = createSlice({
   name: 'feed',
   initialState: initialState,
   reducers: {},
-  selectors: {
-    selectAllOrders: (state) => state.orders,
-    selectTotalOrders: (state) => state.totalOrders,
-    selectTotalOrdersToday: (state) => state.totalOrdersToday,
-    selectFeedError: (state) => state.error,
-    selectIsFeedLoaded: (state) => state.isFeedLoaded
-  },
   extraReducers(builder) {
     builder
       .addCase(getAllOrdersData.pending, (state) => {
@@ -61,12 +55,15 @@ export const getAllOrdersData = createAsyncThunk(
   }
 );
 
-export const {
-  selectAllOrders,
-  selectTotalOrders,
-  selectTotalOrdersToday,
-  selectFeedError,
-  selectIsFeedLoaded
-} = feedSlice.selectors;
+export const selectAllOrders = (state: { feed: TFeedSliceState }) =>
+  state.feed.orders;
+export const selectTotalOrders = (state: { feed: TFeedSliceState }) =>
+  state.feed.totalOrders;
+export const selectTotalOrdersToday = (state: { feed: TFeedSliceState }) =>
+  state.feed.totalOrdersToday;
+export const selectFeedError = (state: { feed: TFeedSliceState }) =>
+  state.feed.error;
+export const selectIsFeedLoaded = (state: { feed: TFeedSliceState }) =>
+  state.feed.isFeedLoaded;
 
 export const feedSliceReducer = feedSlice.reducer;

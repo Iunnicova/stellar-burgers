@@ -26,8 +26,14 @@ const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>;
 
 export type AppDispatch = typeof store.dispatch;
+//устарели
+// export const useDispatch = dispatchHook.withTypes<AppDispatch>();
+// export const useSelector = selectorHook.withTypes<RootState>();
 
-export const useDispatch = dispatchHook.withTypes<AppDispatch>();
-export const useSelector = selectorHook.withTypes<RootState>();
+export const useDispatch: () => AppDispatch = dispatchHook;
+export const useSelector: <TSelected = unknown>(
+  selector: (state: RootState) => TSelected,
+  equalityFn?: (left: TSelected, right: TSelected) => boolean
+) => TSelected = selectorHook;
 
 export default store;

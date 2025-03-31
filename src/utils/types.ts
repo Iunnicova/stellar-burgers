@@ -10,6 +10,7 @@ export type TIngredient = {
   image: string;
   image_large: string;
   image_mobile: string;
+  // count?: number;
 };
 
 export type TConstructorIngredient = TIngredient & {
@@ -24,6 +25,7 @@ export type TOrder = {
   updatedAt: string;
   number: number;
   ingredients: string[];
+  items: string[];
 };
 
 export type TOrdersData = {
